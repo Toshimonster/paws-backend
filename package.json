@@ -1,0 +1,31 @@
+{
+  "name": "paws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/main.js",
+  "config": {},
+  "scripts": {
+    "buildAndRun": "npx tsc && node ./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GNU",
+  "repository": "https://github.com/Toshimonster/Paws",
+  "devDependencies": {
+    "@types/node": "^15.3.1",
+    "@types/omggif": "^1.0.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@gbkwiatt/node-rpi-ws281x-native": "^1.0.1",
+    "ble-host": "^1.0.3",
+    "bleno": "npm:@abandonware/bleno@^0.5.1-4",
+    "chalk": "^4.1.1",
+    "dbus-next": "^0.10.2",
+    "get-pixels": "^3.3.3",
+    "gifuct-js": "^2.1.1",
+    "omggif": "^1.0.10",
+    "rpi-led-matrix": "^1.11.1",
+    "systeminformation": "^5.9.9"
+  }
+}
