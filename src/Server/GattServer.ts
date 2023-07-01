@@ -3,7 +3,7 @@ import NodeBleHost from 'ble-host';
 import {uptime} from 'os'
 import EventEmitter from 'events';
 import Driver from '../Driver';
-import {cpuTemperature, currentLoad, networkInterfaces, Systeminformation} from "systeminformation";
+import {cpuTemperature, currentLoad, networkInterfaces } from "systeminformation";
 
 const BleManager = NodeBleHost.BleManager;
 const AdvertisingDataBuilder = NodeBleHost.AdvertisingDataBuilder;
@@ -99,7 +99,7 @@ export class GattServer extends EventEmitter {
                                         buffer.writeFloatLE(data.max)
                                         callback(AttErrors.SUCCESS, buffer)
                                     })
-                                    .catch(err => {
+                                    .catch(() => {
                                         callback(AttErrors.UNLIKELY_ERROR)
                                     })
                             }
@@ -115,7 +115,7 @@ export class GattServer extends EventEmitter {
                                         buffer.writeFloatLE(data.avgLoad)
                                         callback(AttErrors.SUCCESS, buffer)
                                     })
-                                    .catch(err => {
+                                    .catch(() => {
                                         callback(AttErrors.UNLIKELY_ERROR)
                                     })
                             }
@@ -127,7 +127,7 @@ export class GattServer extends EventEmitter {
                                 networkInterfaces()
                                     .then(data => {
                                         let interfaces = (data instanceof Array) ? data : [data]
-                                        let value = interfaces.map((value, index) => {
+                                        let value = interfaces.map((value) => {
                                             return `${value.ifaceName}:${value.ip4}` 
                                         }).join(",")
                                         callback(AttErrors.SUCCESS, value)

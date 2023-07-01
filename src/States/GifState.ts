@@ -76,7 +76,7 @@ class GifFrame {
     private _height: number;
     private _width: number;
     public get height():number {return this._height};
-    public get width():number {return this._height};
+    public get width():number {return this._width};
     
     constructor(gif: Gif, frame: number, transform: TransformationTypes) {
         

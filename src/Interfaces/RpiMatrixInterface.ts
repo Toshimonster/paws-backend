@@ -1,13 +1,6 @@
 import {BaseInterface} from "./BaseInterface";
 import * as Matrix from "rpi-led-matrix"
-import {GpioMapping, MuxType, RowAddressType, ScanMode} from "rpi-led-matrix";
-import { assert } from "console";
 import { AssertionError } from "assert/strict";
-
-interface RpiMatrixInterfaceOptions {
-    matrixOpts: Matrix.MatrixOptions,
-    runtimeOpts: Matrix.RuntimeOptions
-}
 
 export class RpiMatrixInterface extends BaseInterface {
     private readonly Matrix: Matrix.LedMatrixInstance

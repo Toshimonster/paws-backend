@@ -19,7 +19,7 @@ if (require.main === module) {
         verbose: true
     })
 
-    const srv = new GattServer(Proto, "T")
+    new GattServer(Proto, "T")
 
     Proto.addInterfaces([
         new Paws.Interfaces.TextInterface(

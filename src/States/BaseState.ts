@@ -67,7 +67,7 @@ export abstract class BaseState extends EventEmitter {
     }
 
     protected currentTransitionState: BaseState
-    protected currentTransitionUntil: Number
+    protected currentTransitionUntil: number
 
     executeFrame(driver: Driver, t: number, dt: number, ddt: number): Promise<any> {
         // Execute Transition if transition exists, and create time until end

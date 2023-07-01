@@ -22,7 +22,7 @@ export class TextInterface extends BaseInterface {
             })
         })
 
-        let colors = buffer.slice(0, this.size*3)
+        let colors = buffer.subarray(0, this.size*3)
         for (let y = 0; y < this.options.y; y++) {
             let line = ""
             for (let x = 0; x < this.options.x; x++) {

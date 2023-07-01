@@ -1,8 +1,8 @@
 import {BaseInterface} from "./BaseInterface";
-import Ws281x from "@gbkwiatt/node-rpi-ws281x-native";
+import Ws281x from "rpi-ws281x-native";
 
 export class Ws281xInterface extends BaseInterface {
-    private readonly Channel: Ws281x.SingleInterfaceChannel;
+    private readonly Channel;
     private static cleanup(): void {
         console.log("\nCleaning up ws281x")
         Ws281x.reset();
@@ -13,7 +13,7 @@ export class Ws281xInterface extends BaseInterface {
         });
     }
 
-    constructor(name, numLeds: number, readonly options?:Ws281x.SingleInterfaceChannelOptions) {
+    constructor(name, numLeds: number, readonly options?) {
         super(name);
         this.Channel = Ws281x(numLeds, options)
 
@@ -29,9 +29,9 @@ export class Ws281xInterface extends BaseInterface {
     }
 
     async setBuffer(buffer: Buffer): Promise<void> {
-        const slicedBuffer = buffer.slice(0, this.Channel.array.length * 3)
+        const slicedBuffer = buffer.subarray(0, this.Channel.array.length * 3)
         for (let i = 0; i < this.Channel.array.length; i++) {
-            let data = slicedBuffer.slice(i*3, (i+1)*3)
+            let data = slicedBuffer.subarray(i*3, (i+1)*3)
             this.Channel.array[i] = (data[0] << 16) | (data[1] << 8) | data[2]
         }
         this.Channel.render()
