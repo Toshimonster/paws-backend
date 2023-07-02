@@ -1,10 +1,10 @@
 import Driver from "./Driver";
-import { BaseInterface } from "./Interfaces/BaseInterface";
-import { TextLedInterface } from "./Interfaces/TextLedInterface";
-import { StateHandler } from "./Modes/States/StateHandler";
-import { PulserState } from "./Modes/States/PulserState";
-import { PixelDrawer } from "./Modes/PixelDrawer";
-import { GattServer } from "./Controllers/GattServer";
+import { BaseInterface } from "./Components/Interfaces/BaseInterface";
+import { TextLedInterface } from "./Components/Interfaces/TextLedInterface";
+import { StateHandler } from "./Components/Modes/States/StateHandler";
+import { PulserState } from "./Components/Modes/States/PulserState";
+import { PixelDrawer } from "./Components/Modes/PixelDrawer";
+import { GattServer } from "./Components/Controllers/GattServer";
 
 export default Driver;
 
@@ -51,4 +51,7 @@ if (require.main === module) {
 			PixelDrawer,
 		})
 	);
+
+	await Paws.start();
+	console.log("Paws running!");
 }
