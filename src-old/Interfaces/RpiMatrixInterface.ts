@@ -1,4 +1,4 @@
-import {BaseInterface} from "./BaseInterface";
+import {BaseInterface} from "../../src/Interfaces/BaseInterface";
 import * as Matrix from "rpi-led-matrix"
 import { AssertionError } from "assert/strict";
 

@@ -4,7 +4,9 @@
   "description": "Protogen Animation Warehouse Service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier .\\src\\ -w",
+    "eslint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,10 @@
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/omggif": "^1.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.44.0",
+    "prettier": "^2.8.8",
     "typescript": "^5.1.6"
   },
   "optionalDependencies": {

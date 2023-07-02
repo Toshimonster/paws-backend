@@ -1,4 +1,4 @@
-export {BaseInterface} from './BaseInterface'
+export {BaseInterface} from '../../src/Interfaces/BaseInterface'
 export {
 TextInterface
 } from './TextInterface'

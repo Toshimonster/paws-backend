@@ -1,4 +1,4 @@
-import {BaseInterface} from "./BaseInterface";
+import {BaseInterface} from "../../src/Interfaces/BaseInterface";
 import Ws281x from "rpi-ws281x-native";
 
 export class Ws281xInterface extends BaseInterface {

@@ -139,6 +139,44 @@ export class GattServer extends EventEmitter {
                             }
                         },
                     ]
+                },
+                {
+                    /*
+                    PAWS Additional service; pixel drawing
+                     */
+                    uuid: 'bacc1dbc-f1f3-42f2-b572-bd3e16923f28',
+                    isSecondaryService: true,
+                    characteristics: [
+                        {
+                            // PixelDraw Enabled service
+                            uuid: 'ea003779-e651-49e8-91ab-05b65e66b95f',
+                            properties: ['read', 'write'],
+                            onWrite: (connection, needsResponse, value, callback) => {
+                                this.driver.setState("!!PIXELDRAW!!")
+                                callback(AttErrors.SUCCESS)
+                            },
+                            onRead: (connection, callback) => {
+                                let buffer = Buffer.allocUnsafe(1)
+                                buffer.writeUInt8(this.driver.state === "!!PIXELDRAW!!" ? 1 : 0)
+                                callback(AttErrors.SUCCESS, buffer)
+                            }
+                        },
+                        {
+                            // PixelDraw interface service
+                            uuid: 'ea003779-e651-49e8-91ab-05b65e66b95f',
+                            properties: ['write'],
+                            onWrite: (connection, needsResponse, value, callback) => {
+                                this.driver.setState("!!PIXELDRAW!!")
+                                callback(AttErrors.SUCCESS)
+                            },
+                            onRead: (connection, callback) => {
+                                let buffer = Buffer.allocUnsafe(1)
+                                buffer.writeUInt8(this.driver.state === "!!PIXELDRAW!!" ? 1 : 0)
+                                callback(AttErrors.SUCCESS, buffer)
+                            }
+                        },
+                    ],
+
                 }
             ]);
             

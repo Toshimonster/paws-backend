@@ -1,4 +1,4 @@
-import {BaseInterface} from "./BaseInterface";
+import {BaseInterface} from "../../src/Interfaces/BaseInterface";
 import chalk from "chalk";
 
 interface TextInterfaceOptions {
