@@ -4,8 +4,8 @@ import { AnimatedMode } from "../AnimatedMode.js";
 export class StateHandler extends AnimatedMode {
 	private readonly states: Map<string, BaseState> = new Map();
 	private activeState: BaseState;
-	constructor(states: BaseState[] = []) {
-		super();
+	constructor(name: string | undefined, states: BaseState[] = []) {
+		super(name);
 		for (const state of states) {
 			this.states.set(state.name, state);
 		}
@@ -52,6 +52,7 @@ export class StateHandler extends AnimatedMode {
 	 * @param dt
 	 */
 	async animationFrame(t: number, dt: number) {
+		if (!this.interfaces) return; //Skip frame on mode change
 		await this.activeState.executeFrame(this.interfaces, this, t, dt);
 	}
 }

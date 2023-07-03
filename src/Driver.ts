@@ -57,8 +57,8 @@ class Driver {
 		map: Map<string, T>
 	) {
 		const promises: Promise<void>[] = [];
-		for (const mapKey in map) {
-			promises.push(map[mapKey].init(this));
+		for (const [, comp] of map) {
+			promises.push(comp.init(this));
 		}
 		return await Promise.all(promises);
 	}
@@ -144,6 +144,14 @@ class Driver {
 		const prevMode = this.activeMode;
 		this.activeMode = newMode;
 		await this.activeMode.onActive(this.interfaces, prevMode);
+	}
+
+	getModes() {
+		return this.modes;
+	}
+
+	getModeArray() {
+		return Array.from(this.getModes().values());
 	}
 
 	/**

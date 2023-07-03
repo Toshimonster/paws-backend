@@ -9,7 +9,7 @@ export abstract class BaseInterface extends NamedComponent {
 	 * The expected size of the buffer for each update.
 	 * If undefined, then any buffer size is allowed.
 	 */
-	public bufferSize: number | undefined;
+	public bufferSize?: number;
 
 	protected constructor(name?: string) {
 		super(name);

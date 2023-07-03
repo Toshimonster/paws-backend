@@ -7,6 +7,10 @@ import { PixelDrawer } from "./Components/Modes/PixelDrawer.js";
 import { GattServer } from "./Components/Controllers/GattServer.js";
 
 import { fileURLToPath } from "url";
+import { RandomController } from "./Components/Controllers/RandomController.js";
+import { BaseMode } from "./Components/Modes/BaseMode.js";
+import { BaseController } from "./Components/Controllers/BaseController.js";
+import { BaseState } from "./Components/Modes/States/BaseState.js";
 
 export default Driver;
 
@@ -26,33 +30,45 @@ export const modes = {
 	 * Gives a mode that can control multiple different states, given by StateHandler,
 	 * defined with multiple State classes
 	 */
+	BaseMode,
 	states: {
 		StateHandler,
+
+		BaseState,
 		PulserState,
 	},
 	PixelDrawer,
 };
 
 export const controllers = {
+	BaseController,
 	GattServer,
+	RandomController,
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	// Run by default
 	const Paws = new Driver();
-	Paws.addInterface(new TextLedInterface("TestInterface"));
+	const TestInterface = Paws.addInterface(
+		new TextLedInterface("TestInterface")
+	);
 
 	const StateHandler = Paws.addMode(
-		new modes.states.StateHandler([new modes.states.PulserState()])
+		new modes.states.StateHandler("States", [new modes.states.PulserState()])
 	);
-	const PixelDrawer = Paws.addMode(new modes.PixelDrawer());
+	const PixelDrawer = Paws.addMode(
+		new modes.PixelDrawer("PixelDrawer", {
+			interfaces: [TestInterface],
+		})
+	);
 
-	Paws.addController(
+	Paws.addControllers([
 		new controllers.GattServer({
 			StateHandler,
 			PixelDrawer,
-		})
-	);
+		}),
+		new controllers.RandomController(),
+	]);
 
 	Paws.start().then(() => {
 		console.log("Paws running!");

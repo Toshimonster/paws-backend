@@ -24,6 +24,13 @@ export abstract class BaseMode extends NamedComponent {
 		this.interfaces = undefined;
 	}
 
+	/**
+	 * Returns whether the mode is currently active or not
+	 */
+	public isActive(): boolean {
+		return this.interfaces === undefined;
+	}
+
 	protected constructor(name?: string) {
 		super(name);
 	}

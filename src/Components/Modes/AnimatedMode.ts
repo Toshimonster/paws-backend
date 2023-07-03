@@ -38,7 +38,5 @@ export abstract class AnimatedMode extends BaseMode {
 			setImmediate(this.animationLoop.bind(this), start, t);
 	}
 
-	animationFrame(t: number, dt: number): Promise<void> | void {
-		return;
-	}
+	abstract animationFrame(t: number, dt: number): Promise<void> | void;
 }
