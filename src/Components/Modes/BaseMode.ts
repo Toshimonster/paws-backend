@@ -1,12 +1,17 @@
-import Driver from "../../Driver";
 import { NamedComponent } from "../NamedComponent";
+import { BaseInterface } from "../Interfaces/BaseInterface";
 
 export abstract class BaseMode extends NamedComponent {
-	public onActive(Paws: Driver, prevMode?: BaseMode): Promise<void> | void {
-		return;
+	protected interfaces?: Map<string, BaseInterface>;
+
+	public onActive(
+		subscribedInterfaces: Map<string, BaseInterface>,
+		prevMode?: BaseMode
+	): Promise<void> | void {
+		this.interfaces = subscribedInterfaces;
 	}
-	public onInactive(Paws: Driver, nextMode?: BaseMode): Promise<void> | void {
-		return;
+	public onInactive(nextMode?: BaseMode): Promise<void> | void {
+		this.interfaces = undefined;
 	}
 
 	protected constructor(name?: string) {

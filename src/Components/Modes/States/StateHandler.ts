@@ -1,7 +1,7 @@
-import { BaseMode } from "../BaseMode";
 import { BaseState } from "./BaseState";
+import { AnimatedMode } from "../AnimatedMode";
 
-export class StateHandler extends BaseMode {
+export class StateHandler extends AnimatedMode {
 	private readonly states: Map<string, BaseState>;
 	private activeState: BaseState;
 	constructor(states: BaseState[] = []) {
@@ -11,6 +11,9 @@ export class StateHandler extends BaseMode {
 		}
 	}
 
+	/**
+	 * The active state, currently being shown on device
+	 */
 	get state() {
 		return this.activeState;
 	}
