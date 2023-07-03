@@ -2,11 +2,13 @@
   "name": "paws-backend",
   "version": "1.0.0",
   "description": "Protogen Animation Warehouse Service",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier .\\src\\ -w",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "start": "tsc && node ./build/index.js"
   },
   "repository": {
     "type": "git",

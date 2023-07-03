@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
-    "module": "es2022",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": false,
     "target": "es2022",
     "sourceMap": true,
     "outDir": "build",
     "rootDir": "src",
-    "typeRoots": ["node_modules/@types", "typings"]
+    "typeRoots": ["node_modules/@types", "typings"],
+    "baseUrl": "./build",
+    "lib": ["ES2022"]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src-old",
+    "build"
   ]
 }

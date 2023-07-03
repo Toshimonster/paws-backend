@@ -1,19 +1,47 @@
-import { BaseState } from "./BaseState";
-import { StateHandler } from "./StateHandler";
-import { BaseInterface } from "../../Interfaces/BaseInterface";
+import { BaseState } from "./BaseState.js";
+import { StateHandler } from "./StateHandler.js";
+import { BaseInterface } from "../../Interfaces/BaseInterface.js";
+
+class PulserLed {
+	constructor(readonly n: number, readonly f: number) {}
+
+	nextColor(t: number, intensity = 1, speed = 1): number {
+		return (
+			0xff & (Math.max(0, 255 * Math.sin((this.f * t) / 1000)) * intensity)
+		);
+	}
+}
 
 export class PulserState extends BaseState {
-	constructor() {
-		super();
+	private pulsers: Map<string, PulserLed[]> = new Map();
+	constructor(name?: string) {
+		super(name);
 	}
 
-	executeFrame(
+	async executeFrame(
 		subscribedInterfaces: Map<string, BaseInterface>,
 		handler: StateHandler,
-		t: number,
-		dt: number,
-		ddt: number
-	): Promise<void> | void {
-		return undefined;
+		t: number
+	) {
+		for (const [interfaceName, devInterface] of subscribedInterfaces) {
+			if (!this.pulsers.has(interfaceName)) {
+				const pulsers = [];
+				for (let i = 0; i < devInterface.bufferSize / 3; i++) {
+					pulsers.push(new PulserLed(i, 5 * Math.random()));
+				}
+				this.pulsers.set(interfaceName, pulsers);
+			}
+
+			const pulsers = this.pulsers.get(interfaceName);
+
+			const buffer = Buffer.allocUnsafe(devInterface.bufferSize);
+			for (const PulserLed of pulsers) {
+				const c = PulserLed.nextColor(t, 1);
+				buffer.writeUInt16BE(c | (c << 8), PulserLed.n * 3);
+				buffer.writeUInt8(c, PulserLed.n * 3 + 2);
+			}
+
+			await devInterface.supply(buffer);
+		}
 	}
 }

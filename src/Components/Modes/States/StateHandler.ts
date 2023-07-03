@@ -1,14 +1,15 @@
-import { BaseState } from "./BaseState";
-import { AnimatedMode } from "../AnimatedMode";
+import { BaseState } from "./BaseState.js";
+import { AnimatedMode } from "../AnimatedMode.js";
 
 export class StateHandler extends AnimatedMode {
-	private readonly states: Map<string, BaseState>;
+	private readonly states: Map<string, BaseState> = new Map();
 	private activeState: BaseState;
 	constructor(states: BaseState[] = []) {
 		super();
 		for (const state of states) {
 			this.states.set(state.name, state);
 		}
+		this.activeState = states[0];
 	}
 
 	/**
@@ -45,5 +46,12 @@ export class StateHandler extends AnimatedMode {
 		return true;
 	}
 
-	//TODO animation frame
+	/**
+	 * Runs the animation frame for the active state
+	 * @param t
+	 * @param dt
+	 */
+	async animationFrame(t: number, dt: number) {
+		await this.activeState.executeFrame(this.interfaces, this, t, dt);
+	}
 }

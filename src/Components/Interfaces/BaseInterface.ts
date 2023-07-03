@@ -1,5 +1,4 @@
-import { NamedComponent } from "../NamedComponent";
-import { networkInterfaces } from "systeminformation";
+import { NamedComponent } from "../NamedComponent.js";
 
 /**
  * Represents an interface, which is an abstraction of a device
@@ -10,7 +9,7 @@ export abstract class BaseInterface extends NamedComponent {
 	 * The expected size of the buffer for each update.
 	 * If undefined, then any buffer size is allowed.
 	 */
-	public readonly bufferSize: number | undefined;
+	public bufferSize: number | undefined;
 
 	protected constructor(name?: string) {
 		super(name);
@@ -29,7 +28,7 @@ export abstract class BaseInterface extends NamedComponent {
 	 * Validates buffer size.
 	 * @param buffer The buffer containing information about the movement
 	 */
-	public supply(buffer: Buffer) {
+	public async supply(buffer: Buffer) {
 		if (this.bufferSize && this.bufferSize !== buffer.length)
 			console.error("Invalid buffer size");
 		return this.setBuffer(buffer);

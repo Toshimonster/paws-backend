@@ -1,5 +1,5 @@
-import Crypto from "crypto";
-import Driver from "../Driver";
+import Driver from "../Driver.js";
+import * as Crypto from "crypto";
 
 export abstract class NamedComponent {
 	/**

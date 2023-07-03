@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { BaseInterface } from "./BaseInterface";
+import { BaseInterface } from "./BaseInterface.js";
 
 /**
  * Options for the TextLedInterface
@@ -25,8 +25,8 @@ interface TextLedInterfaceOptions {
 export class TextLedInterface extends BaseInterface {
 	public readonly size: number;
 	readonly options: TextLedInterfaceOptions = {
-		width: 32,
-		height: 64,
+		width: 64,
+		height: 32,
 		symbol: "!",
 	};
 
@@ -35,15 +35,21 @@ export class TextLedInterface extends BaseInterface {
 		// Set defaults
 		this.options = { ...this.options, ...options };
 		this.size = this.options.width * this.options.height;
+		this.bufferSize = this.size * 3;
 	}
 
 	async setBuffer(buffer: Buffer): Promise<void> {
 		//Set cursor to root
 		await new Promise((resolve) => {
 			process.stdout.cursorTo(0, 0, () => {
-				resolve(true);
+				setTimeout(() => {
+					console.clear();
+					resolve(true);
+				}, 10);
 			});
 		});
+
+		console.log(`\n\nTextLedInterface: ${this.name}\n\n`);
 
 		const colors = buffer.subarray(0, this.size * 3);
 		for (let y = 0; y < this.options.height; y++) {

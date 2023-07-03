@@ -1,6 +1,6 @@
-import { PixelDrawer } from "../Modes/PixelDrawer";
-import { StateHandler } from "../Modes/States/StateHandler";
-import { BaseController } from "./BaseController";
+import { PixelDrawer } from "../Modes/PixelDrawer.js";
+import { StateHandler } from "../Modes/States/StateHandler.js";
+import { BaseController } from "./BaseController.js";
 
 interface GattServerOptions {
 	StateHandler?: StateHandler;

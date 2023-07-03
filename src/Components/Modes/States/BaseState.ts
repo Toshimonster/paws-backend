@@ -1,7 +1,6 @@
-import { NamedComponent } from "../../NamedComponent";
-import Driver from "../../../Driver";
-import { StateHandler } from "./StateHandler";
-import { BaseInterface } from "../../Interfaces/BaseInterface";
+import { NamedComponent } from "../../NamedComponent.js";
+import { StateHandler } from "./StateHandler.js";
+import { BaseInterface } from "../../Interfaces/BaseInterface.js";
 
 export abstract class BaseState extends NamedComponent {
 	protected constructor(name?: string) {
@@ -38,13 +37,11 @@ export abstract class BaseState extends NamedComponent {
 	 * @param handler the handler
 	 * @param t
 	 * @param dt
-	 * @param ddt
 	 */
 	abstract executeFrame(
 		subscribedInterfaces: Map<string, BaseInterface>,
 		handler: StateHandler,
 		t: number,
-		dt: number,
-		ddt: number
+		dt: number
 	): Promise<void> | void;
 }

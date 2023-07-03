@@ -1,21 +1,18 @@
-import { BaseInterface } from "./Components/Interfaces/BaseInterface";
-import { BaseMode } from "./Components/Modes/BaseMode";
-import { BaseController } from "./Components/Controllers/BaseController";
-import { NamedComponent } from "./Components/NamedComponent";
+import { BaseInterface } from "./Components/Interfaces/BaseInterface.js";
+import { BaseMode } from "./Components/Modes/BaseMode.js";
+import { BaseController } from "./Components/Controllers/BaseController.js";
+import { NamedComponent } from "./Components/NamedComponent.js";
 
 /**
  * P.A.W.S Driver. Drives the entire operation
  */
 class Driver {
-	private interfaces: Map<string, BaseInterface>;
-	private modes: Map<string, BaseMode>;
+	private interfaces: Map<string, BaseInterface> = new Map();
+	private modes: Map<string, BaseMode> = new Map();
 	private modesDefaultId: string | undefined;
-	private controllers: Map<string, BaseController>;
+	private controllers: Map<string, BaseController> = new Map();
 
 	private activeMode: BaseMode | undefined;
-	get mode() {
-		return this.activeMode;
-	}
 
 	/**
 	 * Adds a named component to a given map
@@ -92,8 +89,8 @@ class Driver {
 	 */
 	addMode<T extends BaseMode>(mode: T): T {
 		// Set default
-		if (!this.modesDefaultId) this.modesDefaultId = mode.name;
 		this.addComponent(this.modes, mode);
+		if (!this.modesDefaultId) this.setDefaultMode(mode.name);
 		return mode;
 	}
 
@@ -125,12 +122,38 @@ class Driver {
 	}
 
 	/**
+	 * Sets the default mode for the PAWS device, to be set to on initialisation.
+	 * @param modeId
+	 */
+	setDefaultMode(modeId: string) {
+		if (!this.modes.has(modeId))
+			throw new Error(`Unknown mode '${modeId}' - has it been added yet?`);
+		this.modesDefaultId = modeId;
+	}
+
+	/**
+	 * Sets the mode for the given PAWS device, triggering callbacks
+	 * @param modeId
+	 */
+	public async setMode(modeId: string) {
+		if (!this.modes.has(modeId))
+			throw new Error(`Unknown mode '${modeId}' - has it been added yet?`);
+		const newMode = this.modes.get(modeId);
+		// run callbacks
+		if (this.activeMode) await this.activeMode.onInactive(newMode);
+		const prevMode = this.activeMode;
+		this.activeMode = newMode;
+		await this.activeMode.onActive(this.interfaces, prevMode);
+	}
+
+	/**
 	 * Starts the server, initialising and starting modes
 	 */
 	async start() {
 		await this.initComponents(this.interfaces);
 		await this.initComponents(this.modes);
 		await this.initComponents(this.controllers);
+		await this.setMode(this.modesDefaultId);
 	}
 }
 

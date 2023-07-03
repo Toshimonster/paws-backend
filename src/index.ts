@@ -1,10 +1,12 @@
-import Driver from "./Driver";
-import { BaseInterface } from "./Components/Interfaces/BaseInterface";
-import { TextLedInterface } from "./Components/Interfaces/TextLedInterface";
-import { StateHandler } from "./Components/Modes/States/StateHandler";
-import { PulserState } from "./Components/Modes/States/PulserState";
-import { PixelDrawer } from "./Components/Modes/PixelDrawer";
-import { GattServer } from "./Components/Controllers/GattServer";
+import Driver from "./Driver.js";
+import { BaseInterface } from "./Components/Interfaces/BaseInterface.js";
+import { TextLedInterface } from "./Components/Interfaces/TextLedInterface.js";
+import { StateHandler } from "./Components/Modes/States/StateHandler.js";
+import { PulserState } from "./Components/Modes/States/PulserState.js";
+import { PixelDrawer } from "./Components/Modes/PixelDrawer.js";
+import { GattServer } from "./Components/Controllers/GattServer.js";
+
+import { fileURLToPath } from "url";
 
 export default Driver;
 
@@ -35,7 +37,7 @@ export const controllers = {
 	GattServer,
 };
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	// Run by default
 	const Paws = new Driver();
 	Paws.addInterface(new TextLedInterface("TestInterface"));
@@ -52,6 +54,7 @@ if (require.main === module) {
 		})
 	);
 
-	await Paws.start();
-	console.log("Paws running!");
+	Paws.start().then(() => {
+		console.log("Paws running!");
+	});
 }
