@@ -36,6 +36,8 @@ export class TextLedInterface extends BaseInterface {
 		this.options = { ...this.options, ...options };
 		this.size = this.options.width * this.options.height;
 		this.bufferSize = this.size * 3;
+
+		console.clear(); // clear console
 	}
 
 	async setBuffer(buffer: Buffer): Promise<void> {
@@ -43,7 +45,6 @@ export class TextLedInterface extends BaseInterface {
 		await new Promise((resolve) => {
 			process.stdout.cursorTo(0, 0, () => {
 				setTimeout(() => {
-					console.clear();
 					resolve(true);
 				}, 10);
 			});
