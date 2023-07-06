@@ -63,7 +63,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	Paws.addControllers([
-		new controllers.GattServer({
+		new controllers.GattServer("Toshi", {
 			StateHandler,
 			PixelDrawer,
 		}),
