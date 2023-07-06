@@ -16,6 +16,6 @@ export class RandomController extends BaseController {
 		const modes = device.getModeArray();
 		const choice = modes[Math.floor(modes.length * Math.random())];
 		await device.setMode(choice.name);
-		setTimeout(this.randomSeq.bind(this), 1000, device);
+		setTimeout(this.randomSeq.bind(this), 1000 + Math.random() * 10000, device);
 	}
 }
