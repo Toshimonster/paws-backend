@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { BaseInterface } from "./BaseInterface.js";
+import { createInterface } from "readline";
 
 /**
  * Options for the TextLedInterface
@@ -42,13 +43,7 @@ export class TextLedInterface extends BaseInterface {
 
 	async setBuffer(buffer: Buffer): Promise<void> {
 		//Set cursor to root
-		await new Promise((resolve) => {
-			process.stdout.cursorTo(0, 0, () => {
-				setTimeout(() => {
-					resolve(true);
-				}, 10);
-			});
-		});
+		
 
 		console.log(`\n\nTextLedInterface: ${this.name}\n\n`);
 
@@ -69,5 +64,13 @@ export class TextLedInterface extends BaseInterface {
 				});
 			});
 		}
+
+		await new Promise((resolve) => {
+			process.stdout.cursorTo(0, 0, () => {
+				setTimeout(() => {
+					resolve(true);
+				}, 10);
+			});
+		});
 	}
 }

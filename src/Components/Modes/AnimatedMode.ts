@@ -21,6 +21,7 @@ export abstract class AnimatedMode extends BaseMode {
 	async onInactive() {
 		super.onInactive();
 		await this.animationPromise; //Finish last frame
+		this.animationActive = false;
 	}
 
 	private async animationLoop(
