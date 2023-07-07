@@ -1,18 +1,19 @@
 import { BaseMode } from "./BaseMode.js";
 import { performance } from "perf_hooks";
+import { BaseInterface } from "../Interfaces/BaseInterface.js";
 
 /**
  * Represents an animated mode, and supplies animationFrame like features.
  */
 export abstract class AnimatedMode extends BaseMode {
 	protected animationActive = false;
-	protected animationPromise: Promise<void> | void;
+	protected animationPromise: Promise<void> | void = undefined;
 	protected frame = 0;
 	protected constructor(name?: string) {
 		super(name);
 	}
 
-	async onActive(subscribedInterfaces) {
+	async onActive(subscribedInterfaces: Map<string, BaseInterface>) {
 		super.onActive(subscribedInterfaces);
 		this.animationActive = true;
 		this.animationLoop().catch(console.error);

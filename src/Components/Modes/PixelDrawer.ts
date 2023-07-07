@@ -5,15 +5,13 @@ export interface PixelDrawerOptions {
 	/**
 	 * Ordered list containing all interfaces to be included in the drawer
 	 */
-	interfaces: BaseInterface[] | undefined;
+	interfaces: BaseInterface[];
 }
 export class PixelDrawer extends BaseMode {
 	protected options: PixelDrawerOptions = {
 		interfaces: [],
 	};
 	protected state: Buffer;
-	private updatePromise: Promise<unknown>;
-
 	/**
 	 * The buffer size expected for this drawer
 	 */
@@ -21,7 +19,7 @@ export class PixelDrawer extends BaseMode {
 		return this.state.length;
 	}
 
-	constructor(name?: string, options?: PixelDrawerOptions) {
+	constructor(name?: string, options?: Partial<PixelDrawerOptions>) {
 		super(name);
 		this.options = { ...this.options, ...options };
 		// Get buffer size for all interfaces
@@ -42,9 +40,9 @@ export class PixelDrawer extends BaseMode {
 		for (const devInterface of this.options.interfaces) {
 			const buffer = this.state.subarray(
 				pointer,
-				pointer + devInterface.bufferSize
+				pointer + (devInterface.bufferSize ?? 0)
 			);
-			pointer += devInterface.bufferSize;
+			pointer += devInterface.bufferSize ?? 0;
 			await devInterface.supply(buffer);
 		}
 	}

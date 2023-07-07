@@ -4,13 +4,17 @@ import { TextLedInterface } from "./Components/Interfaces/TextLedInterface.js";
 import { StateHandler } from "./Components/Modes/States/StateHandler.js";
 import { PulserState } from "./Components/Modes/States/PulserState.js";
 import { PixelDrawer } from "./Components/Modes/PixelDrawer.js";
-import { GattServer } from "./Components/Controllers/GattServer.js";
+import { GattServer } from "./Components/Controllers/Gatt/GattServer.js";
 
 import { fileURLToPath } from "url";
 import { RandomController } from "./Components/Controllers/RandomController.js";
 import { BaseMode } from "./Components/Modes/BaseMode.js";
 import { BaseController } from "./Components/Controllers/BaseController.js";
 import { BaseState } from "./Components/Modes/States/BaseState.js";
+import {
+	GattServerUUIDS,
+	GattServices,
+} from "./Components/Controllers/Gatt/GattServices.js";
 
 export default Driver;
 
@@ -42,7 +46,12 @@ export const modes = {
 
 export const controllers = {
 	BaseController,
-	GattServer,
+	gatt: {
+		GattServer,
+
+		GattServices,
+		GattServerUUIDS,
+	},
 	RandomController,
 };
 
@@ -63,9 +72,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	Paws.addControllers([
-		new controllers.GattServer("Toshi", {
+		new controllers.gatt.GattServer("Toshi", {
 			StateHandler,
 			PixelDrawer,
+			services: [controllers.gatt.GattServices.PAWS_EXTENDED()],
 		}),
 		new controllers.RandomController(),
 	]);

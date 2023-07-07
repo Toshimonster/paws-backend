@@ -34,7 +34,7 @@ export class StateHandler extends AnimatedMode {
 	 */
 	public async setState(name: string) {
 		if (!this.states.has(name)) return false;
-		const newState = this.states.get(name);
+		const newState = this.states.get(name) as BaseState;
 
 		if (this.activeState) await this.activeState.onInactive(this, newState);
 

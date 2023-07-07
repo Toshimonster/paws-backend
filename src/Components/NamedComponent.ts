@@ -7,7 +7,7 @@ export abstract class NamedComponent {
 	 */
 	public readonly name: string;
 
-	constructor(name?: string) {
+	protected constructor(name?: string) {
 		if (!name) {
 			this.name = Crypto.randomUUID();
 		} else {

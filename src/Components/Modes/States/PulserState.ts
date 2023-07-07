@@ -26,15 +26,15 @@ export class PulserState extends BaseState {
 		for (const [interfaceName, devInterface] of subscribedInterfaces) {
 			if (!this.pulsers.has(interfaceName)) {
 				const pulsers = [];
-				for (let i = 0; i < devInterface.bufferSize / 3; i++) {
+				for (let i = 0; i < (devInterface.bufferSize ?? 0) / 3; i++) {
 					pulsers.push(new PulserLed(i, 5 * Math.random()));
 				}
 				this.pulsers.set(interfaceName, pulsers);
 			}
 
-			const pulsers = this.pulsers.get(interfaceName);
+			const pulsers = this.pulsers.get(interfaceName) as PulserLed[];
 
-			const buffer = Buffer.allocUnsafe(devInterface.bufferSize);
+			const buffer = Buffer.allocUnsafe(devInterface.bufferSize ?? 0);
 			for (const PulserLed of pulsers) {
 				const c = PulserLed.nextColor(t, 1);
 				buffer.writeUInt16BE(c | (c << 8), PulserLed.n * 3);

@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import { BaseInterface } from "./BaseInterface.js";
-import { createInterface } from "readline";
 
 /**
  * Options for the TextLedInterface
@@ -9,15 +8,15 @@ interface TextLedInterfaceOptions {
 	/**
 	 * The width of the Text-LED matrix, default 64
 	 */
-	width?: number;
+	width: number;
 	/**
 	 * The height of the Text-LED matrix, default 32
 	 */
-	height?: number;
+	height: number;
 	/**
 	 * The Text symbol to represent an LED, default '!'
 	 */
-	symbol?: string;
+	symbol: string;
 }
 
 /**
@@ -31,7 +30,7 @@ export class TextLedInterface extends BaseInterface {
 		symbol: "!",
 	};
 
-	constructor(name, options?: TextLedInterfaceOptions) {
+	constructor(name?: string, options: Partial<TextLedInterfaceOptions> = {}) {
 		super(name);
 		// Set defaults
 		this.options = { ...this.options, ...options };
@@ -43,7 +42,6 @@ export class TextLedInterface extends BaseInterface {
 
 	async setBuffer(buffer: Buffer): Promise<void> {
 		//Set cursor to root
-		
 
 		console.log(`\n\nTextLedInterface: ${this.name}\n\n`);
 
