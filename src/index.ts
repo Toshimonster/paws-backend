@@ -74,7 +74,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	Paws.addControllers([
 		new controllers.gatt.GattServer("Toshi", {
 			name: "Toshi",
-			services: [controllers.gatt.GattServices.PAWS_EXTENDED()],
+			services: [
+				controllers.gatt.GattServices.PAWS(StateHandler),
+				controllers.gatt.GattServices.PAWS_EXTENDED(),
+			],
 		}),
 		new controllers.RandomController(),
 	]);
