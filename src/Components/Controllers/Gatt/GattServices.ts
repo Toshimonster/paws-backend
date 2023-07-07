@@ -2,9 +2,44 @@ import Driver from "../../../Driver.js";
 import BleHost, { GattServerService } from "ble-host";
 import { PixelDrawer } from "../../Modes/PixelDrawer.js";
 import { StreamDrawer } from "../../Modes/StreamDrawer.js";
-import { GattUuidDef } from "./GattServer.js";
+import { uptime } from "os";
+import {
+	cpuTemperature,
+	currentLoad,
+	networkInterfaces,
+} from "systeminformation";
+import { StateHandler } from "../../Modes/States/StateHandler.js";
 
 const { AttErrors } = BleHost;
+
+type uuid = string;
+export type GattUuidDef = {
+	PAWS: {
+		uuid: uuid;
+		children: {
+			STATES: uuid;
+			STATE: uuid;
+			TIMESTAMP: uuid;
+			UPTIME: uuid;
+			CPU_TEMP: uuid;
+			CPU_LOAD: uuid;
+			NETWORK: uuid;
+		};
+	};
+	PAWS_EXTRA: {
+		uuid: uuid;
+		children: {
+			PIXELDRAW_ENABLED: uuid;
+			PIXELDRAW_INTERFACE: uuid;
+			STREAM_ENABLED: uuid;
+			STREAM_INTERFACE: uuid;
+		};
+	};
+};
+
+/**
+ * The default server uuids used for all gatt services
+ */
 export const GattServerUUIDS: GattUuidDef = {
 	PAWS: {
 		uuid: "04f9d599-ce17-4397-a65d-cf769397551a",
@@ -30,6 +65,122 @@ export const GattServerUUIDS: GattUuidDef = {
 };
 
 export const GattServices = {
+	/**
+	 * Defines the PAWS Api, based on a specific state handler.
+	 * The base PAWS api assumes only one mode, the stateHandler, which is populated with all states for the object.
+	 * @param stateHandler The state mode
+	 * @param uuids The default BLE characteristic and service uuids
+	 * @constructor
+	 */
+	PAWS:
+		(stateHandler: StateHandler, uuids: GattUuidDef = GattServerUUIDS) =>
+		(): GattServerService => {
+			return {
+				//P.A.W.S Service
+				uuid: uuids.PAWS.uuid,
+				characteristics: [
+					{
+						// PAWS state list
+						uuid: uuids.PAWS.children.STATES,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							callback(
+								AttErrors.SUCCESS,
+								stateHandler.listStateNames().join(", ")
+							);
+						},
+					},
+					{
+						// PAWS Raw State Read and Write
+						uuid: uuids.PAWS.children.STATE,
+						properties: ["read", "write"],
+						onRead: (connection, callback) => {
+							callback(AttErrors.SUCCESS, stateHandler.state.name);
+						},
+						onWrite: async (connection, needsResponse, value, callback) => {
+							const stateChange = value.toString().replace(/\0/g, "");
+							if (await stateHandler.setState(stateChange)) {
+								callback(AttErrors.SUCCESS);
+							} else {
+								callback(AttErrors.OUT_OF_RANGE);
+							}
+						},
+					},
+					{
+						// Current Timestamp as String
+						uuid: uuids.PAWS.children.TIMESTAMP,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							callback(AttErrors.SUCCESS, new Date().toString());
+						},
+					},
+					{
+						// Current Uptime as FloatLE
+						uuid: uuids.PAWS.children.UPTIME,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							const buffer = Buffer.allocUnsafe(4);
+							buffer.writeFloatLE(uptime());
+							callback(AttErrors.SUCCESS, buffer);
+						},
+					},
+					{
+						// CPU temp
+						uuid: uuids.PAWS.children.CPU_TEMP,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							cpuTemperature()
+								.then((data) => {
+									const buffer = Buffer.allocUnsafe(4);
+									buffer.writeFloatLE(data.max);
+									callback(AttErrors.SUCCESS, buffer);
+								})
+								.catch(() => {
+									callback(AttErrors.UNLIKELY_ERROR, Buffer.allocUnsafe(0));
+								});
+						},
+					},
+					{
+						// CPU load
+						uuid: uuids.PAWS.children.CPU_LOAD,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							currentLoad()
+								.then((data) => {
+									const buffer = Buffer.allocUnsafe(4);
+									buffer.writeFloatLE(data.avgLoad);
+									callback(AttErrors.SUCCESS, buffer);
+								})
+								.catch(() => {
+									callback(AttErrors.UNLIKELY_ERROR, Buffer.allocUnsafe(0));
+								});
+						},
+					},
+					{
+						// Network Addresses
+						uuid: uuids.PAWS.children.NETWORK,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							networkInterfaces()
+								.then((data) => {
+									const interfaces = data instanceof Array ? data : [data];
+									const value = interfaces
+										.map((value) => {
+											return `${value.ifaceName}:${value.ip4}`;
+										})
+										.join(",");
+									callback(AttErrors.SUCCESS, value);
+								})
+								.catch((err) => {
+									console.error(err);
+									callback(AttErrors.UNLIKELY_ERROR, Buffer.allocUnsafe(0));
+								});
+						},
+					},
+				],
+			};
+		},
+
 	PAWS_EXTENDED:
 		(uuids: GattUuidDef = GattServerUUIDS) =>
 		(driver: Driver): GattServerService => {

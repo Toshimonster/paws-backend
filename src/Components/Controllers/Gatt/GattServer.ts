@@ -7,31 +7,6 @@ import HciSocket from "hci-socket";
 
 const { BleManager, AdvertisingDataBuilder, HciErrors } = BleHost;
 
-type uuid = string;
-export type GattUuidDef = {
-	PAWS: {
-		uuid: uuid;
-		children: {
-			STATES: uuid;
-			STATE: uuid;
-			TIMESTAMP: uuid;
-			UPTIME: uuid;
-			CPU_TEMP: uuid;
-			CPU_LOAD: uuid;
-			NETWORK: uuid;
-		};
-	};
-	PAWS_EXTRA: {
-		uuid: uuid;
-		children: {
-			PIXELDRAW_ENABLED: uuid;
-			PIXELDRAW_INTERFACE: uuid;
-			STREAM_ENABLED: uuid;
-			STREAM_INTERFACE: uuid;
-		};
-	};
-};
-
 interface GattServerOptions {
 	name: string;
 	services: ServiceDefs[];
@@ -62,11 +37,12 @@ export class GattServer extends BaseController {
 
 	/**
 	 * Creates a GattServer Controller
-	 * @param name The name of the controller
+	 * @param name The name of the controller. Will define options, if left undefined
 	 * @param options The options for the gatt server
 	 */
 	constructor(name?: string, options: Partial<GattServerOptions> = {}) {
 		super(name);
+		if (!options.name) options.name = name;
 		this.options = { ...this.options, ...options };
 	}
 
