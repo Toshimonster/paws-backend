@@ -1,8 +1,103 @@
-interface BleHostParams {
-	BleManager;
-	AdvertisingDataBuilder;
-	HciErrors;
-	AttErrors: {
+declare module "ble-host" {
+	let BleHost: BleHostParams;
+	export default BleHost;
+
+	import { EventEmitter } from "stream";
+
+	interface BleHostParams {
+		BleManager: {
+			create(
+				transport: Transport,
+				options: BleManagerOptions,
+				callback: (err: Error | null, manager?: BleManager) => void
+			): void;
+		};
+		AdvertisingDataBuilder: Constructable<AdvertisingDataBuilder>;
+		HciErrors: AttErrors;
+		AttErrors: AttErrors;
+	}
+
+	interface Transport extends EventEmitter {
+		write(buffer: Buffer): void;
+		on(event: "data", listener: (data: Buffer) => void): this;
+	}
+
+	interface BleManagerOptions {
+		staticRandomAddress?: string;
+	}
+
+	class BleManager {
+		startScan(parameters: {
+			activeScan?: boolean;
+			scanWindow?: number;
+			scanInterval?: number;
+			filterDuplicates?: boolean;
+			scanFilters?: any[];
+		}): Scanner;
+
+		gattDb: GattServerDb;
+
+		setAdvertisingData(buffer: Buffer, callback?: () => void): void;
+		startAdvertising(
+			options?: {
+				intervalMin?: number;
+				intervalMax?: number;
+				advertisingType?:
+					| "ADV_IND"
+					| "ADV_DIRECT_IND_HIGH_DUTY_CYCLE"
+					| "ADV_SCAN_IND"
+					| "ADV_NONCONN_IND"
+					| "ADV_DIRECT_IND_LOW_DUTY_CYCLE";
+				directedAddress?: {
+					type?: "public" | "random";
+					address?: string;
+				};
+				channelMap?: (37 | 38 | 39)[];
+			},
+			callback?: (status: 0, conn: Connection) => void
+		): void;
+	}
+
+	class GattServerDb {
+		setDeviceName(name: string): void;
+		addServices(services: GattService): void;
+	}
+
+	interface GattService {}
+
+	class Scanner {}
+
+	class Connection extends EventEmitter {
+		on(event: "disconnect", listener: () => void);
+	}
+
+	interface Constructable<T> {
+		new (...args: any): T;
+	}
+
+	class AdvertisingDataBuilder {
+		build(): Buffer;
+		addFlags(
+			flags: (
+				| "leLimitedDiscoverableMode"
+				| "leGeneralDiscoverableMode"
+				| "brEdrNotSupported"
+				| "simultaneousLeAndBdEdrToSameDeviceCapableController"
+				| "simultaneousLeAndBrEdrToSameDeviceCapableHost"
+			)[]
+		): AdvertisingDataBuilder;
+		addLocalName(isComplete: boolean, name: string): AdvertisingDataBuilder;
+		add128BitServiceUUIDs(
+			isComplete: boolean,
+			uuids: string[]
+		): AdvertisingDataBuilder;
+		add16BitServiceUUIDs(
+			isComplete: boolean,
+			uuids: (string | number)[]
+		): AdvertisingDataBuilder;
+	}
+
+	interface AttErrors {
 		INVALID_HANDLE: 0x01;
 		READ_NOT_PERMITTED: 0x02;
 		WRITE_NOT_PERMITTED: 0x03;
@@ -28,10 +123,5 @@ interface BleHostParams {
 
 		SUCCESS: 0;
 		RELIABLE_WRITE_RESPONSE_NOT_MATCHING: -1;
-	};
-}
-
-declare module "ble-host" {
-	let BleHost: BleHostParams;
-	export default BleHost;
+	}
 }

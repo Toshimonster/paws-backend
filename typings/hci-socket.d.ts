@@ -1,4 +1,8 @@
 declare module "hci-socket" {
-	class HciSocket {}
+	import { EventEmitter } from "stream";
+
+	class HciSocket extends EventEmitter {
+		write(data: Buffer): void;
+	}
 	export default HciSocket;
 }
