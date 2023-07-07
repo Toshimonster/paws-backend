@@ -1,8 +1,10 @@
 import { PixelDrawer } from "../Modes/PixelDrawer.js";
 import { StateHandler } from "../Modes/States/StateHandler.js";
 import { BaseController } from "./BaseController.js";
-import { BleManager, AdvertisingDataBuilder, HciErrors } from "ble-host";
 import HciSocket from 'hci-socket';
+import BleHost from 'ble-host';
+const { BleManager, AdvertisingDataBuilder, HciErrors } = BleHost;
+
 
 type uuidDef = {[key:string]: string | {uuid: string, children?: uuidDef}};
 
@@ -32,7 +34,7 @@ export class GattServer extends BaseController {
 			
 		}
 	};
-	private readonly transport: HciSocket = new HciSocket()
+	private transport?: HciSocket;
 
 
 	constructor(name?: string, options: GattServerOptions = {}) {
@@ -41,7 +43,22 @@ export class GattServer extends BaseController {
 	}
 
 	start() {
-		
+
+        try {
+            this.transport = new HciSocket()
+        } catch (error) {
+            if (error.code === "EPERM") {
+                console.error("Gatt Server Controller requires root access. Please run with sudo.")
+            } else if (error.code === "EBUSY") {
+                console.error("Gatt Server Controller cannot find a free bluetooth device. Please check settings.")
+            } else if (error.code === "ENODEV") {
+                console.error("Gatt Server Controller cannot find any bluetooth devices.")
+            } else {
+                throw error;
+            }
+            process.exit(1)
+        }
+		this.transport = new HciSocket()
 
         BleManager.create(this.transport, {}, (err, manager) => {
             // err is either null or an Error object
