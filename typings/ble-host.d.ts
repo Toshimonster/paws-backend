@@ -9,7 +9,7 @@ declare module "ble-host" {
 			create(
 				transport: Transport,
 				options: BleManagerOptions,
-				callback: (err: Error | null, manager?: BleManager) => void
+				callback: (err: Error | null, manager: BleManager) => void
 			): void;
 		};
 		AdvertisingDataBuilder: Constructable<AdvertisingDataBuilder>;
@@ -68,7 +68,7 @@ declare module "ble-host" {
 	class Scanner {}
 
 	class Connection extends EventEmitter {
-		on(event: "disconnect", listener: () => void);
+		on(event: "disconnect", listener: () => void): this;
 	}
 
 	interface Constructable<T> {

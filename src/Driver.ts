@@ -138,8 +138,8 @@ class Driver {
 	public async setMode(modeId: string) {
 		if (!this.modes.has(modeId))
 			throw new Error(`Unknown mode '${modeId}' - has it been added yet?`);
-		if (this.activeMode?.name === modeId) return;
 		const newMode = this.modes.get(modeId);
+		if (!newMode) return;
 		// run callbacks
 		if (this.activeMode) await this.activeMode.onInactive(newMode);
 		const prevMode = this.activeMode;
@@ -166,7 +166,9 @@ class Driver {
 		await this.initComponents(this.interfaces);
 		await this.initComponents(this.modes);
 		await this.initComponents(this.controllers);
-		await this.setMode(this.modesDefaultId);
+		await this.setMode(
+			this.modesDefaultId || Array.from(this.modes.values())[0].name
+		);
 	}
 }
 

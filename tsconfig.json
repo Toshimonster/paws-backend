@@ -10,7 +10,9 @@
     "rootDir": "src",
     "typeRoots": ["node_modules/@types", "typings"],
     "baseUrl": "./build",
-    "lib": ["ES2022"]
+    "lib": ["ES2022"],
+    "strict": true,
+    "useUnknownInCatchVariables": false
   },
   "exclude": [
     "node_modules",
