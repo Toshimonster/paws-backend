@@ -3,10 +3,31 @@ import { StateHandler } from "../Modes/States/StateHandler.js";
 import { BaseController } from "./BaseController.js";
 import HciSocket from 'hci-socket';
 import BleHost from 'ble-host';
-const { BleManager, AdvertisingDataBuilder, HciErrors } = BleHost;
+import Driver from "../../Driver.js";
+const { BleManager, AdvertisingDataBuilder, HciErrors, AttErrors } = BleHost;
 
-
-type uuidDef = {[key:string]: string | {uuid: string, children?: uuidDef}};
+type uuid = string;
+type uuidDef = {
+    PAWS?: {
+        uuid?: uuid,
+        children?: {
+            STATES?: uuid,
+			STATE?: uuid,
+			TIMESTAMP?: uuid,
+            UPTIME?: uuid,
+            CPU_TEMP?: uuid,
+            CPU_LOAD?: uuid,
+            NETWORK?: uuid
+        }
+    },
+    PAWS_EXTRA?: {
+        uuid?: uuid,
+        children?: {
+            PIXELDRAW_ENABLED?: uuid,
+            PIXELDRAW_INTERFACE?: uuid
+        }
+    }
+};
 
 interface GattServerOptions {
 	StateHandler?: StateHandler;
@@ -30,7 +51,14 @@ export class GattServer extends BaseController {
 					CPU_LOAD: '26414bca-7991-46e5-a559-376c7d515a1f',
 					NETWORK: '4bb22157-34d4-481c-949f-18aaa00f45e4'
 				}
-			}
+			},
+            PAWS_EXTRA: {
+                uuid: "bacc1dbc-f1f3-42f2-b572-bd3e16923f28",
+                children: {
+                    PIXELDRAW_ENABLED: "ea003779-e651-49e8-91ab-05b65e66b95f",
+                    PIXELDRAW_INTERFACE: "ea003779-e651-49e8-91ab-05b65e66b95f"
+                }
+            }
 			
 		}
 	};
@@ -42,7 +70,7 @@ export class GattServer extends BaseController {
 		this.options = { ...this.options, ...options };
 	}
 
-	start() {
+	start(driver: Driver) {
 
         try {
             this.transport = new HciSocket()
@@ -71,16 +99,41 @@ export class GattServer extends BaseController {
             manager.gattDb.setDeviceName(this.name);
             manager.gattDb.addServices([
                 { //P.A.W.S Service
-                    uuid: '04f9d599-ce17-4397-a65d-cf769397551a',
+                    uuid: this.options.uuids.PAWS.uuid,
                     characteristics: []
                 },
                 {
                     /*
                     PAWS Additional service; pixel drawing
                      */
-                    uuid: 'bacc1dbc-f1f3-42f2-b572-bd3e16923f28',
+                    uuid: this.options.uuids.PAWS_EXTRA.uuid,
                     isSecondaryService: true,
-                    characteristics: [],
+                    characteristics: [
+                        {
+                            // PixelDraw Enabled service
+                            uuid: this.options.uuids.PAWS_EXTRA.children.PIXELDRAW_ENABLED,
+                            properties: ['read'],
+                            onRead: (connection, callback) => {
+                                let buffer = Buffer.allocUnsafe(1)
+                                buffer.writeUInt8(driver.getMode().name === "PIXELDRAW" ? 1 : 0)
+                                callback(AttErrors.SUCCESS, buffer)
+                            }
+                        },
+                        {
+                            // PixelDraw interface service
+                            uuid: this.options.uuids.PAWS_EXTRA.children.PIXELDRAW_INTERFACE,
+                            properties: ['write'],
+                            onWrite: (connection, needsResponse, value, callback) => {
+                                //this.driver.setState("!!PIXELDRAW!!")
+                                callback(AttErrors.SUCCESS)
+                            },
+                            onRead: (connection, callback) => {
+                                let buffer = Buffer.allocUnsafe(1)
+                                //buffer.writeUInt8(this.driver.state === "!!PIXELDRAW!!" ? 1 : 0)
+                                callback(AttErrors.SUCCESS, buffer)
+                            }
+                        },
+                    ],
 
                 }
             ]);

@@ -147,6 +147,10 @@ class Driver {
 		await this.activeMode.onActive(this.interfaces, prevMode);
 	}
 
+	getMode() {
+		return this.activeMode;
+	}
+
 	getModes() {
 		return this.modes;
 	}
