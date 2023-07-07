@@ -1,5 +1,5 @@
 # Paws
-Protogen Animation Warehouse Service
+The **Protogen Animation Warehouse Service**
 
 If networking dosent work - do 
 `nmcli c up ToshiProto`

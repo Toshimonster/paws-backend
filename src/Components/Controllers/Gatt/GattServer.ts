@@ -1,13 +1,19 @@
-import { PixelDrawer } from "../../Modes/PixelDrawer.js";
-import { StateHandler } from "../../Modes/States/StateHandler.js";
 import { BaseController } from "../BaseController.js";
-import BleHost, { GattServerService } from "ble-host";
-import Driver from "../../../Driver.js";
-import HciSocket from "hci-socket";
+import BleHost, { GattServerService, Transport } from "ble-host";
+import { Driver } from "../../../Driver.js";
+
+//import HciSocket from "hci-socket";
+
+import EventEmitter from "events";
+class HciSocket extends EventEmitter {
+	write() {
+		return;
+	}
+}
 
 const { BleManager, AdvertisingDataBuilder, HciErrors } = BleHost;
 
-interface GattServerOptions {
+export interface GattServerOptions {
 	name: string;
 	services: ServiceDefs[];
 }
@@ -15,8 +21,11 @@ interface GattServerOptions {
 /**
  * Should return a server service, upon an instance of the driver
  */
-type ServiceDefs = (driver: Driver) => GattServerService;
+export type ServiceDefs = (driver: Driver) => GattServerService;
 
+/**
+ * @ignore
+ */
 export const GattServerOptionsDefault: GattServerOptions = {
 	/**
 	 * The name to be displayed on the GATT advertising data
@@ -33,7 +42,7 @@ export const GattServerOptionsDefault: GattServerOptions = {
  */
 export class GattServer extends BaseController {
 	private readonly options: GattServerOptions = GattServerOptionsDefault;
-	private transport?: HciSocket;
+	private transport?: Transport;
 
 	/**
 	 * Creates a GattServer Controller

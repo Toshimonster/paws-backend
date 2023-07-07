@@ -17,7 +17,7 @@ declare module "ble-host" {
 		AttErrors: AttErrors;
 	}
 
-	interface Transport extends EventEmitter {
+	export interface Transport extends EventEmitter {
 		write(buffer: Buffer): void;
 		on(event: "data", listener: (data: Buffer) => void): this;
 	}

@@ -1,7 +1,5 @@
-import { PixelDrawer } from "../Modes/PixelDrawer.js";
-import { StateHandler } from "../Modes/States/StateHandler.js";
 import { BaseController } from "./BaseController.js";
-import Driver from "../../Driver.js";
+import { Driver } from "../../Driver.js";
 
 export class RandomController extends BaseController {
 	constructor() {

@@ -1,6 +1,6 @@
 import { BaseState } from "./BaseState.js";
 import { StateHandler } from "./StateHandler.js";
-import { BaseInterface } from "../../Interfaces/BaseInterface.js";
+import { BaseInterface } from "../../Interfaces/index.js";
 
 class PulserLed {
 	constructor(readonly n: number, readonly f: number) {}

@@ -6,7 +6,7 @@ import { NamedComponent } from "./Components/NamedComponent.js";
 /**
  * P.A.W.S Driver. Drives the entire operation
  */
-class Driver {
+export class Driver {
 	private interfaces: Map<string, BaseInterface> = new Map();
 	private modes: Map<string, BaseMode> = new Map();
 	private modesDefaultId: string | undefined;
@@ -171,5 +171,3 @@ class Driver {
 		);
 	}
 }
-
-export default Driver;

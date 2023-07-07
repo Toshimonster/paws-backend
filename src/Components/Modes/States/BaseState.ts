@@ -1,6 +1,6 @@
 import { NamedComponent } from "../../NamedComponent.js";
 import { StateHandler } from "./StateHandler.js";
-import { BaseInterface } from "../../Interfaces/BaseInterface.js";
+import { BaseInterface } from "../../Interfaces/index.js";
 
 export abstract class BaseState extends NamedComponent {
 	protected constructor(name?: string) {

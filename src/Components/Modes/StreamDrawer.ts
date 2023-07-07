@@ -1,6 +1,6 @@
 import { PixelDrawer, PixelDrawerOptions } from "./PixelDrawer.js";
 
-export interface StreamDrawerOptions extends PixelDrawerOptions {}
+export type StreamDrawerOptions = PixelDrawerOptions;
 
 export class StreamDrawer extends PixelDrawer {
 	protected options: StreamDrawerOptions = {

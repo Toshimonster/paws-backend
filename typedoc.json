@@ -1,0 +1,11 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "PAWS",
+  "out": "doc",
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeNotDocumented": false,
+  "entryPoints": ["src"],
+  "exclude": ["node_modules", "**/*.spec.ts", "src_old", "build"]
+}

@@ -1,4 +1,4 @@
-import Driver from "../../../Driver.js";
+import { Driver } from "../../../Driver.js";
 import BleHost, { GattServerService } from "ble-host";
 import { PixelDrawer } from "../../Modes/PixelDrawer.js";
 import { StreamDrawer } from "../../Modes/StreamDrawer.js";
@@ -12,7 +12,7 @@ import { StateHandler } from "../../Modes/States/StateHandler.js";
 
 const { AttErrors } = BleHost;
 
-type uuid = string;
+export type uuid = string;
 export type GattUuidDef = {
 	PAWS: {
 		uuid: uuid;
