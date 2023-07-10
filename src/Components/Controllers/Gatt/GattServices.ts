@@ -64,6 +64,9 @@ export const GattServerUUIDS: GattUuidDef = {
 	},
 };
 
+/**
+ * Sample services, supplying different functionalities
+ */
 export const GattServices = {
 	/**
 	 * Defines the PAWS Api, based on a specific state handler.
@@ -72,7 +75,7 @@ export const GattServices = {
 	 * @param uuids The default BLE characteristic and service uuids
 	 * @constructor
 	 */
-	PAWS:
+	PAWS_STATE:
 		(stateHandler: StateHandler, uuids: GattUuidDef = GattServerUUIDS) =>
 		(): GattServerService => {
 			return {

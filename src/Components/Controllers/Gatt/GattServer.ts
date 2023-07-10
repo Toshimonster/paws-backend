@@ -1,10 +1,7 @@
 import { BaseController } from "../BaseController.js";
 import BleHost, { GattServerService, Transport } from "ble-host";
 import { Driver } from "../../../Driver.js";
-
-import EventEmitter from "events";
 import { optionalImport } from "../../Helper/OptionalImport.js";
-
 const HciSocket: new () => Transport = await optionalImport(
 	async () => (await import("hci-socket")).default
 );
@@ -53,6 +50,10 @@ export class GattServer extends BaseController {
 		this.options = { ...this.options, ...options };
 	}
 
+	/**
+	 * Starts the GATT server, given a driver
+	 * @param driver The PAWS driver
+	 */
 	start(driver: Driver) {
 		try {
 			this.transport = new HciSocket();
@@ -74,7 +75,6 @@ export class GattServer extends BaseController {
 			}
 			process.exit(1);
 		}
-		this.transport = new HciSocket();
 
 		BleManager.create(this.transport, {}, (err, manager) => {
 			// err is either null or an Error object
@@ -84,6 +84,7 @@ export class GattServer extends BaseController {
 				return;
 			}
 
+			// set services and option names
 			manager.gattDb.setDeviceName(this.name);
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
