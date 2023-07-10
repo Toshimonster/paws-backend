@@ -2,14 +2,12 @@ import { BaseController } from "../BaseController.js";
 import BleHost, { GattServerService, Transport } from "ble-host";
 import { Driver } from "../../../Driver.js";
 
-//import HciSocket from "hci-socket";
-
 import EventEmitter from "events";
-class HciSocket extends EventEmitter {
-	write() {
-		return;
-	}
-}
+import { optionalImport } from "../../Helper/OptionalImport.js";
+
+const HciSocket: new () => Transport = await optionalImport(
+	async () => (await import("hci-socket")).default
+);
 
 const { BleManager, AdvertisingDataBuilder, HciErrors } = BleHost;
 
