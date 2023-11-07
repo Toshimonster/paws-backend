@@ -32,7 +32,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		new Controllers.Gatt.GattServer("Toshi", {
 			name: "Toshi",
 			services: [
-				Controllers.Gatt.Services.GattServices.PAWS(StateHandler),
+				Controllers.Gatt.Services.GattServices.PAWS_STATE(StateHandler),
 				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED(),
 			],
 		}),
