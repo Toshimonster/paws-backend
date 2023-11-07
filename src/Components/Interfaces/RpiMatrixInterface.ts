@@ -11,8 +11,8 @@ export class RpiMatrixInterface extends BaseInterface {
 	constructor(
 		name?: string,
 		readonly options: {
-			runtimeOpts: Partial<Matrix.MatrixOptions>;
-			matrixOpts: Partial<Matrix.RuntimeOptions>;
+			runtimeOpts: Partial<Matrix.MatrixOptions | any>;
+			matrixOpts: Partial<Matrix.RuntimeOptions | any>;
 		} = {
 			runtimeOpts: {},
 			matrixOpts: {},

@@ -19,12 +19,37 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		new Interfaces.TextLedInterface("TestInterface")
 	);
 
+	const FrontP3 = Paws.addInterface(
+		new Interfaces.RpiMatrixInterface("Front P3 Matrices", {
+			matrixOpts: {
+				rows: 32,
+				cols: 64,
+				chainLength: 2,
+				pwmLsbNanoseconds: 450,
+				pwmDitherBits: 1,
+				pwmBits: 7,
+			},
+			runtimeOpts: {
+				gpioSlowdown: 3,
+				dropPrivileges: 0,
+			},
+		})
+	);
+
+	const Ws2812b = Paws.addInterface(
+		new Interfaces.Ws281xInterface("Ws2812b", 61 * 2, {
+			gpio: 21,
+			stripType: "ws2812",
+			brightness: 5,
+		})
+	);
+
 	const StateHandler = Paws.addMode(
 		new Modes.States.StateHandler("States", [new Modes.States.PulserState()])
 	);
 	const PixelDrawer = Paws.addMode(
 		new Modes.PixelDrawer("PixelDrawer", {
-			interfaces: [TestInterface],
+			interfaces: [FrontP3],
 		})
 	);
 

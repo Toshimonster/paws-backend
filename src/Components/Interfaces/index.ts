@@ -5,3 +5,5 @@
 
 export * from "./BaseInterface.js";
 export * from "./TextLedInterface.js";
+export * from "./RpiMatrixInterface.js";
+export * from "./Ws281xInterface.js";
