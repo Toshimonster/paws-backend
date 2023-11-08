@@ -5,13 +5,16 @@ import { BaseInterface } from "../../Interfaces/index.js";
 class PulserLed {
 	constructor(readonly n: number, readonly f: number) {}
 
-	nextColor(t: number, intensity = 1, speed = 1): number {
+	nextColor(t: number, intensity = 0.5): number {
 		return (
 			0xff & (Math.max(0, 255 * Math.sin((this.f * t) / 1000)) * intensity)
 		);
 	}
 }
 
+/**
+ * A debug state to show pulsing LED's
+ */
 export class PulserState extends BaseState {
 	private pulsers: Map<string, PulserLed[]> = new Map();
 	constructor(name?: string) {

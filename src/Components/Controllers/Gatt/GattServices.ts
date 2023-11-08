@@ -203,7 +203,6 @@ export const GattServices = {
 	 * This defines mode and handling for PIXELDRAW modes, and STREAMDRAW modes.
 	 * Note, that this requires the specified mode to be active, unlike the PAWS api.
 	 * As such, multiple PIXELDRAW and STREAMDRAW modes can co-exist.
-	 * @param uuids The default BLE characteristic and service uuids
 	 * @constructor
 	 */
 	PAWS_EXTENDED:
@@ -226,9 +225,6 @@ export const GattServices = {
 								driver.getMode() instanceof PixelDrawer ? 1 : 0
 							);
 							callback(AttErrors.SUCCESS, buffer);
-						},
-						onAuthorizeRead: (connection, callback) => {
-							callback(AttErrors.SUCCESS);
 						},
 					},
 					{

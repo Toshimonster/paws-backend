@@ -52,6 +52,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			interfaces: [FrontP3],
 		})
 	);
+	const StreamDrawer = Paws.addMode(
+		new Modes.StreamDrawer("StreamDrawer", {
+			interfaces: [FrontP3],
+		})
+	);
 
 	Paws.addControllers([
 		new Controllers.Gatt.GattServer("Toshi", {
@@ -59,9 +64,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			services: [
 				Controllers.Gatt.Services.GattServices.PAWS_STATE(StateHandler),
 				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED(),
+				Controllers.Gatt.Services.GattServices.PAWS_MODE(),
 			],
 		}),
-		new Controllers.RandomController(),
+		//new Controllers.RandomController(),
 	]);
 
 	Paws.start().then(() => {

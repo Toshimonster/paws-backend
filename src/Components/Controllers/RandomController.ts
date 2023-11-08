@@ -1,6 +1,9 @@
 import { BaseController } from "./BaseController.js";
 import { Driver } from "../../Driver.js";
 
+/**
+ * A debug controller, that randomly chooses modes if and when they appear
+ */
 export class RandomController extends BaseController {
 	constructor() {
 		super();
