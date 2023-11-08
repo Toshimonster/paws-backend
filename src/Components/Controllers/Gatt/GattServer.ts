@@ -111,9 +111,9 @@ export class GattServer extends BaseController {
 			console.log(_128UUIDS);
 			const advDataBuffer = new AdvertisingDataBuilder()
 				.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
-				.addLocalName(/*isComplete*/ true, this.name)
-				.add128BitServiceUUIDs(/*isComplete*/ true, _128UUIDS)
-				.add16BitServiceUUIDs(/*isComplete*/ true, _16UUIDS)
+				.addLocalName(/*isComplete*/ true, "test")
+				.add16BitServiceUUIDs(/*isComplete*/ false, [_128UUIDS[0]])
+				//.add16BitServiceUUIDs(/*isComplete*/ true, _16UUIDS)
 				.build();
 			manager.setAdvertisingData(advDataBuffer);
 			// call manager.setScanResponseData(...) if scan response data is desired too
