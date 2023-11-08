@@ -90,18 +90,18 @@ export class PixelDrawer extends BaseMode {
 
 					if (red == 255 && blue == 255 && green == 255)
 						console.log(adjPixelNum);
-					toSend.writeUInt8(red, adjPixelNum * 3);
-					toSend.writeUInt8(green, adjPixelNum * 3 + 1);
-					toSend.writeUInt8(blue, adjPixelNum * 3 + 2);
+					toSend.writeUInt8(red, adjPixelNum);
+					toSend.writeUInt8(green, adjPixelNum + 1);
+					toSend.writeUInt8(blue, adjPixelNum + 2);
 					// 0,0 -> 127
 					// 0,2 -> 125
 					// (1,0) 128 -> 255
 					// (1,2) 130 -> 253
 					let mirPixelNum = 64 + (63 - c) + r * 2 * cols;
 					mirPixelNum = mirror;
-					toSend.writeUInt8(red, mirPixelNum * 3);
-					toSend.writeUInt8(green, mirPixelNum * 3 + 1);
-					toSend.writeUInt8(blue, mirPixelNum * 3 + 2);
+					toSend.writeUInt8(red, mirPixelNum);
+					toSend.writeUInt8(green, mirPixelNum + 1);
+					toSend.writeUInt8(blue, mirPixelNum + 2);
 				}
 			}
 			await this.update(toSend);
