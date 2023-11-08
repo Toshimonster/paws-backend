@@ -91,7 +91,9 @@ export class GattServer extends BaseController {
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
 			);
+			console.log(1);
 			manager.gattDb.addServices(services);
+			console.log(2);
 
 			const ServiceUUIDS = services.map((service) => service.uuid);
 			const { _128UUIDS, _16UUIDS } = ServiceUUIDS.reduce(
