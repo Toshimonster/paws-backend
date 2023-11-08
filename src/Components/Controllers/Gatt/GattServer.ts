@@ -86,14 +86,11 @@ export class GattServer extends BaseController {
 			}
 
 			// set services and option names
-			console.log("Device name " + this.name);
 			manager.gattDb.setDeviceName(this.name);
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
 			);
-			console.log(1);
 			manager.gattDb.addServices(services);
-			console.log(2);
 
 			const ServiceUUIDS = services.map((service) => service.uuid);
 			const { _128UUIDS, _16UUIDS } = ServiceUUIDS.reduce(
@@ -111,6 +108,7 @@ export class GattServer extends BaseController {
 				}
 			);
 
+			console.log(_128UUIDS);
 			const advDataBuffer = new AdvertisingDataBuilder()
 				.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
 				.addLocalName(/*isComplete*/ true, this.name)
