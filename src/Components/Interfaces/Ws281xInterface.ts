@@ -29,6 +29,7 @@ export class Ws281xInterface extends BaseInterface {
 		process.on("SIGUSR1", Ws281xInterface.cleanup);
 		// Catches uncaught exceptions
 		//process.on('uncaughtException', Ws281xInterface.cleanup)
+		this.bufferSize = numLeds * 3;
 	}
 
 	async setBuffer(buffer: Buffer): Promise<void> {
