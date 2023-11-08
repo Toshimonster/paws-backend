@@ -137,8 +137,11 @@ export class Driver {
 	 * @return if successful
 	 */
 	public async setMode(modeId: string) {
-		if (!this.modes.has(modeId))
-			throw new Error(`Unknown mode '${modeId}' - has it been added yet?`);
+		if (!this.modes.has(modeId)) {
+			console.warn(`Unknown mode '${modeId}' - has it been added yet?`);
+			return false;
+		}
+		if (this.activeMode?.name === modeId) return false;
 		const newMode = this.modes.get(modeId);
 		if (!newMode) return false;
 		// run callbacks
