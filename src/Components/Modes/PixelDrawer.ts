@@ -28,9 +28,6 @@ export class PixelDrawer extends BaseMode {
 			(a, cv) => a + (cv.bufferSize || 0),
 			0
 		);
-		console.log("!!!");
-		console.log(bufferSize);
-		console.log(this.options.interfaces[0].bufferSize);
 		this.state = Buffer.alloc(bufferSize);
 
 		//potential
@@ -68,10 +65,12 @@ export class PixelDrawer extends BaseMode {
 		this.potentialBufferLength += buffer.length;
 
 		console.log(this.potentialBufferLength);
-		if (this.potentialBufferLength === this.bufferSize) {
+		if (this.potentialBufferLength === this.bufferSize / 2) {
 			console.log("!!!");
-			await this.update(this.potentialBuffer);
-		} else if (this.potentialBufferLength > this.bufferSize) {
+			await this.update(
+				Buffer.concat([this.potentialBuffer, this.potentialBuffer])
+			);
+		} else if (this.potentialBufferLength > this.bufferSize / 2) {
 			console.error("BUFFER OVERFLOW");
 			this.potentialBufferLength = 0;
 		}
