@@ -44,8 +44,6 @@ export class PulserState extends BaseState {
 				buffer.writeUInt8(c, PulserLed.n * 3 + 2);
 			}
 
-			console.log("Supplying " + interfaceName);
-			console.log(buffer);
 			await devInterface.supply(buffer);
 		}
 	}

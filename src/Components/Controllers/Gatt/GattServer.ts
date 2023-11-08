@@ -76,6 +76,7 @@ export class GattServer extends BaseController {
 			process.exit(1);
 		}
 
+		console.log("Creating BLE");
 		BleManager.create(this.transport, {}, (err, manager) => {
 			// err is either null or an Error object
 			// if err is null, manager contains a fully initialized BleManager object
@@ -85,6 +86,7 @@ export class GattServer extends BaseController {
 			}
 
 			// set services and option names
+			console.log("Device name " + this.name);
 			manager.gattDb.setDeviceName(this.name);
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
@@ -124,8 +126,10 @@ export class GattServer extends BaseController {
 						if (status != HciErrors.SUCCESS) {
 							// Advertising could not be started for some controller-specific reason, try again after 10 seconds
 							setTimeout(startAdv, 10000);
+							console.log("Cannot start advertising.. restarting");
 							return;
 						}
+						console.log("Done!");
 						conn.on("disconnect", startAdv); // restart advertising after disconnect
 					}
 				);
