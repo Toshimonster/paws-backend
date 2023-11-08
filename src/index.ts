@@ -15,9 +15,9 @@ import { fileURLToPath } from "url";
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	// Run by default
 	const Paws = new Driver();
-	const TestInterface = Paws.addInterface(
+	/*const TestInterface = Paws.addInterface(
 		new Interfaces.TextLedInterface("TestInterface")
-	);
+	);*/
 
 	const FrontP3 = Paws.addInterface(
 		new Interfaces.RpiMatrixInterface("Front P3 Matrices", {
