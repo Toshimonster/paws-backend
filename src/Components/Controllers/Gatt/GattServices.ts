@@ -258,7 +258,7 @@ export const GattServices = {
 							console.log("PAWS EXTRA PIXELDRAW WRITE");
 							const mode = driver.getMode();
 							if (mode instanceof PixelDrawer) {
-								if (mode.bufferSize === value.length) {
+								if (mode.bufferSize !== value.length) {
 									console.log(
 										`Size mismatch ${mode.bufferSize} != ${value.length}`
 									);
