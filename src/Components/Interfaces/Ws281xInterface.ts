@@ -18,6 +18,7 @@ export class Ws281xInterface extends BaseInterface {
 
 	constructor(name?: string, numLeds = 0, options?: object) {
 		super(name);
+		console.log("Ws2812b!");
 		this.Channel = Ws281x(numLeds, options);
 
 		// Catches kill event
@@ -38,5 +39,6 @@ export class Ws281xInterface extends BaseInterface {
 			this.Channel.array[i] = (data[0] << 16) | (data[1] << 8) | data[2];
 		}
 		Ws281x.render();
+		console.log(this.Channel.array);
 	}
 }
