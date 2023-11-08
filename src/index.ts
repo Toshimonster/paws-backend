@@ -58,7 +58,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		})
 	);
 
-	Paws.addControllers([
+	const GattServer = Paws.addController(
 		new Controllers.Gatt.GattServer("Toshi", {
 			name: "Toshi",
 			services: [
@@ -66,11 +66,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED(),
 				Controllers.Gatt.Services.GattServices.PAWS_MODE(),
 			],
-		}),
-		//new Controllers.RandomController(),
-	]);
+		})
+	);
 
 	Paws.start().then(() => {
 		console.log("Paws running!");
+		GattServer.start(Paws);
 	});
 }
