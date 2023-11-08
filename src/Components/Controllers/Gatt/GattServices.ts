@@ -12,7 +12,7 @@ import { StateHandler } from "../../Modes/States/StateHandler.js";
 
 const { AttErrors } = BleHost;
 
-export type uuid = string;
+export type uuid = string | number;
 export type GattUuidDef = {
 	PAWS: {
 		uuid: uuid;

@@ -34,6 +34,7 @@ export const GattServerOptionsDefault: GattServerOptions = {
 
 /**
  * A controller that represents the PAWS device as a BLE GATT server
+ * Note that only the first 128 bit UUID service will be advertised
  */
 export class GattServer extends BaseController {
 	private readonly options: GattServerOptions = GattServerOptionsDefault;
@@ -112,7 +113,7 @@ export class GattServer extends BaseController {
 			const advDataBuffer = new AdvertisingDataBuilder()
 				.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
 				.addLocalName(/*isComplete*/ true, "test")
-				.add16BitServiceUUIDs(/*isComplete*/ false, [_128UUIDS[0]])
+				.add128BitServiceUUIDs(/*isComplete*/ false, [_128UUIDS[0]])
 				//.add16BitServiceUUIDs(/*isComplete*/ true, _16UUIDS)
 				.build();
 			manager.setAdvertisingData(advDataBuffer);
