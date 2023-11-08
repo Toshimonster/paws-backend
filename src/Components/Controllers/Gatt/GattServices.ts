@@ -212,7 +212,7 @@ export const GattServices = {
 				/*
                 PAWS Additional service; pixel drawing
                  */
-				isSecondaryService: true,
+				//isSecondaryService: true,
 				uuid: uuids.PAWS_EXTRA.uuid,
 				characteristics: [
 					{
@@ -300,7 +300,7 @@ export const GattServices = {
 		(driver: Driver): GattServerService => {
 			return {
 				//P.A.W.S Mode Service
-				isSecondaryService: true,
+				//isSecondaryService: true,
 				uuid: uuids.PAWS_MODE.uuid,
 				characteristics: [
 					{
