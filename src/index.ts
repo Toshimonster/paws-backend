@@ -60,7 +60,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 
 	const GattServer = Paws.addController(
 		new Controllers.Gatt.GattServer("PAWS-Toshi", {
-			name: "PAWS-Toshi",
+			name: "PAWS-T",
 			services: [
 				Controllers.Gatt.Services.GattServices.PAWS_STATE(StateHandler),
 				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED(),
