@@ -68,7 +68,10 @@ export class PixelDrawer extends BaseMode {
 		if (this.potentialBufferLength === this.bufferSize / 2) {
 			console.log("!!!");
 			await this.update(
-				Buffer.concat([this.potentialBuffer, this.potentialBuffer])
+				Buffer.concat(
+					[this.potentialBuffer, this.potentialBuffer],
+					this.bufferSize
+				)
 			);
 		} else if (this.potentialBufferLength > this.bufferSize / 2) {
 			console.error("BUFFER OVERFLOW");
@@ -86,7 +89,7 @@ export class PixelDrawer extends BaseMode {
 	public async update(buffer: Buffer) {
 		if (buffer.length !== this.bufferSize)
 			throw new Error(
-				"Buffer size mis-match; ensure controller is giving correct updates!"
+				`Buffer size mis-match; ensure controller is giving correct updates! ${buffer.length} != ${this.bufferSize}`
 			);
 		this.state = buffer;
 		if (this.isActive()) {
