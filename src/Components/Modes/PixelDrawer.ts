@@ -80,16 +80,9 @@ export class PixelDrawer extends BaseMode {
 					const green = this.potentialBuffer.readUInt8(pixelNum * 3 + 1);
 					const blue = this.potentialBuffer.readUInt8(pixelNum * 3 + 2);
 
-					const i = c + r * 64;
-					console.log(i);
-					const normal = 3 * (64 * ~~(i / 64) + i);
-					const mirror = 3 * (3 * 64 * ~~(i / 64) + 2 * 64 - i - 1);
+					const i = c + r * 64; // Ith pixel, split for loop for simplicity
+					const adjPixelNum = 3 * (64 * ~~(i / 64) + i);
 
-					let adjPixelNum = c + r * 2 * cols;
-					adjPixelNum = normal;
-
-					if (red == 255 && blue == 255 && green == 255)
-						console.log(adjPixelNum);
 					toSend.writeUInt8(red, adjPixelNum);
 					toSend.writeUInt8(green, adjPixelNum + 1);
 					toSend.writeUInt8(blue, adjPixelNum + 2);
@@ -97,8 +90,7 @@ export class PixelDrawer extends BaseMode {
 					// 0,2 -> 125
 					// (1,0) 128 -> 255
 					// (1,2) 130 -> 253
-					let mirPixelNum = 64 + (63 - c) + r * 2 * cols;
-					mirPixelNum = mirror;
+					const mirPixelNum = 3 * (3 * 64 * ~~(i / 64) + 2 * 64 - i - 1);
 					toSend.writeUInt8(red, mirPixelNum);
 					toSend.writeUInt8(green, mirPixelNum + 1);
 					toSend.writeUInt8(blue, mirPixelNum + 2);
