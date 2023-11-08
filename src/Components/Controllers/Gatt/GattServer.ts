@@ -86,11 +86,15 @@ export class GattServer extends BaseController {
 				return;
 			}
 
+			// remove manditory services (?)
+
 			// set services and option names
-			manager.gattDb.setDeviceName(this.name);
+			console.log(`Setting device name to ${this.options.name}`);
+			manager.gattDb.setDeviceName(this.options.name);
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
 			);
+			console.log(services);
 			manager.gattDb.addServices(services);
 
 			const ServiceUUIDS = services.map((service) => service.uuid);
@@ -110,9 +114,9 @@ export class GattServer extends BaseController {
 			);
 
 			const advDataBuffer = new AdvertisingDataBuilder()
-				//.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
-				.addLocalName(/*isComplete*/ true, "test")
-				.add128BitServiceUUIDs(/*isComplete*/ false, [_128UUIDS[0]])
+				.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
+				.addLocalName(/*isComplete*/ true, this.options.name)
+				.add128BitServiceUUIDs(/*isComplete*/ true, [_128UUIDS[0]])
 				//.add16BitServiceUUIDs(/*isComplete*/ true, _16UUIDS)
 				.build();
 			manager.setAdvertisingData(advDataBuffer);
@@ -129,7 +133,7 @@ export class GattServer extends BaseController {
 							console.log("Cannot start advertising.. restarting");
 							return;
 						}
-						console.log("Connected to device!");
+						console.log("Connected to device! - " + conn.peerAddress);
 						conn.on("disconnect", startAdv); // restart advertising after disconnect
 					}
 				);

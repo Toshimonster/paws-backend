@@ -232,6 +232,7 @@ declare module "ble-host" {
 
 	class Connection extends EventEmitter {
 		on(event: "disconnect", listener: () => void): this;
+		peerAddress: string;
 	}
 
 	class AdvertisingDataBuilder {
