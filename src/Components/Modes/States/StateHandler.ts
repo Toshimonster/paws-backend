@@ -53,6 +53,28 @@ export class StateHandler extends AnimatedMode {
 	 */
 	async animationFrame(t: number, dt: number) {
 		if (!this.interfaces) return; //Skip frame on mode change
+		const transition = this.activeState.getTransitionInfo();
+		if (transition.state) {
+			// Handle transition
+			if (transition.until && t >= transition.until) {
+				// End transition & draw normal state
+				this.activeState.endTransition();
+			} else {
+				// Transition active
+				if (!transition.until) {
+					// Start transition
+					if (!transition.state.length)
+						throw new Error(
+							`Transition state ${transition.state.name} does not have a required length value set`
+						);
+
+					this.activeState.setTransitionUntil(t + transition.state.length);
+				}
+				// Draw transition and not normal state
+				await transition.state.executeFrame(this.interfaces, this, t, dt);
+				return;
+			}
+		}
 		await this.activeState.executeFrame(this.interfaces, this, t, dt);
 	}
 }

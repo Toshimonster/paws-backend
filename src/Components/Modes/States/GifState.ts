@@ -1,4 +1,4 @@
-import { BaseState } from "./BaseState.js";
+import { BaseState, TransitionInfo } from "./BaseState.js";
 import { StateHandler } from "./StateHandler.js";
 import { BaseInterface } from "../../Interfaces/index.js";
 import { GifBinary, GifReader } from "omggif";
@@ -29,26 +29,32 @@ export class GifState extends BaseState {
 
 	constructor(
 		name: string,
-		options: GifStateOptions
-		//transitions?: TransitionInfo[]
+		options: GifStateOptions,
+		transitions?: TransitionInfo[]
 	) {
-		super(name /*transitions*/);
+		super(name, transitions);
 		this.options = options;
 		console.log("Loading gifs...");
 		this.load();
-		//Reset animation on active or transition
-
-		// this.on("OnTransition", () => {
-		// 	this.start = undefined;
-		// });
 	}
 
 	onActive(
 		StateHandler: StateHandler,
 		prevMode?: BaseState
 	): Promise<void> | void {
+		// reset
 		this.start = undefined;
 		return super.onActive(StateHandler, prevMode);
+	}
+
+	onTransition(
+		StateHandler: StateHandler,
+		prevState?: BaseState,
+		thisState?: BaseState
+	): Promise<void> | void {
+		// reset
+		this.start = undefined;
+		return super.onTransition(StateHandler, prevState, thisState);
 	}
 
 	load() {

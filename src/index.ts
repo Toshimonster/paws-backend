@@ -1,3 +1,5 @@
+import * as fs from "fs";
+
 export { Driver } from "./Driver.js";
 
 export * as Interfaces from "./Components/Interfaces/index.js";
@@ -11,6 +13,8 @@ import * as Modes from "./Components/Modes/index.js";
 import * as Controllers from "./Components/Controllers/index.js";
 
 import { fileURLToPath } from "url";
+import * as path from "path";
+import { BaseState } from "./Components/Modes/States/index.js";
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	// Run by default
@@ -20,7 +24,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);*/
 
 	const FrontP3 = Paws.addInterface(
-		new Interfaces.RpiMatrixInterface("Front P3 Matrices", {
+		new Interfaces.RpiMatrixInterface("face", {
 			matrixOpts: {
 				rows: 32,
 				cols: 64,
@@ -37,7 +41,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	const Ws2812b = Paws.addInterface(
-		new Interfaces.Ws281xInterface("Ws2812b", 61 * 2, {
+		new Interfaces.Ws281xInterface("circle", 61 * 2, {
 			gpio: 21,
 			stripType: "ws2812",
 			brightness: 5,
@@ -45,10 +49,88 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	const stateAssetRoot = "/paws/ToshiProto/State Assets/";
+
+	const states: BaseState[] = [];
+	fs.readdirSync(stateAssetRoot).forEach((state) => {
+		console.log(state);
+		const stateRoot = path.join(stateAssetRoot, state);
+		const stateTransitions = new Map<string, any[]>();
+		const root: { file: string; interface: string; transformation: any }[] = [];
+
+		fs.readdirSync(stateRoot).forEach((file) => {
+			const fileRoot = path.join(stateRoot, file);
+
+			console.log("\t\t", fileRoot);
+			const stateMatches = file.match(/\w+(?=\[\w+(_\w+)?\]\.gif$)/);
+			const state =
+				stateMatches === null ? undefined : stateMatches[0].slice(1);
+			if (state != state) return; //File is not a valid gif definition file
+			const transitions = file.match(/\w+(?=[-~])/g);
+			const componentInterfaceMatches = file.match(
+				/\[[^_\]]+(?=(_\w+)?\]\.gif$)/
+			); //Remove prefix [
+			const componentInterface =
+				componentInterfaceMatches === null
+					? undefined
+					: componentInterfaceMatches[0].slice(1);
+			if (!componentInterface) return;
+			const transformationMatches = file.match(/_\w+(?=\]\.gif$)/);
+			const transformation =
+				transformationMatches === null
+					? "normal"
+					: transformationMatches[0].slice(1);
+
+			console.log("\t\t", state);
+			console.log("\t\t", transitions);
+			console.log("\t\t", componentInterface);
+			console.log("\t\t", transformation);
+
+			const interfaceDefinition: {
+				file: string;
+				interface: string;
+				transformation: string;
+			} = {
+				interface: componentInterface,
+				file: fileRoot,
+				transformation: transformation,
+			};
+
+			if (!transitions) {
+				root.push(interfaceDefinition);
+			} else {
+				const tempTrans = transitions.join("-");
+				if (!stateTransitions.has(tempTrans))
+					stateTransitions.set(tempTrans, []);
+				stateTransitions.get(tempTrans)?.push(interfaceDefinition);
+			}
+		});
+
+		const transitions: { from: string[]; state: BaseState }[] = [];
+		console.log("\tTransitions");
+		stateTransitions.forEach((value, key) => {
+			console.log("\t\t", key);
+			console.log("\t\t", value);
+			transitions.push({
+				from: key.split("-"),
+				state: new Modes.States.GifState(key + "~" + state, {
+					interfaceDefinitions: value,
+				}),
+			});
+		});
+
+		states.push(
+			new Modes.States.GifState(
+				state,
+				{ interfaceDefinitions: root },
+				transitions
+			)
+		);
+	});
+
 	const StateHandler = Paws.addMode(
 		new Modes.States.StateHandler("States", [
 			new Modes.States.PulserState(),
-			new Modes.States.GifState("Idle", {
+			/*new Modes.States.GifState("Idle", {
 				interfaceDefinitions: [
 					{
 						interface: "Front P3 Matrices",
@@ -61,7 +143,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 						transformation: "mirror",
 					},
 				],
-			}),
+			}),*/
+			...states,
 		])
 	);
 
