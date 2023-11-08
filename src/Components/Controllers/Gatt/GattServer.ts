@@ -91,7 +91,6 @@ export class GattServer extends BaseController {
 			const services = this.options.services.map((serviceFun) =>
 				serviceFun(driver)
 			);
-			console.log(services);
 			manager.gattDb.addServices(services);
 
 			const ServiceUUIDS = services.map((service) => service.uuid);
@@ -110,7 +109,6 @@ export class GattServer extends BaseController {
 				}
 			);
 
-			console.log(_128UUIDS);
 			const advDataBuffer = new AdvertisingDataBuilder()
 				//.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
 				.addLocalName(/*isComplete*/ true, "test")
@@ -131,7 +129,7 @@ export class GattServer extends BaseController {
 							console.log("Cannot start advertising.. restarting");
 							return;
 						}
-						console.log("Done!");
+						console.log("Connected to device!");
 						conn.on("disconnect", startAdv); // restart advertising after disconnect
 					}
 				);
