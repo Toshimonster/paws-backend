@@ -145,7 +145,6 @@ export class Driver {
 		if (this.activeMode) await this.activeMode.onInactive(newMode);
 		const prevMode = this.activeMode;
 		this.activeMode = newMode;
-		console.log(this.interfaces);
 		await this.activeMode.onActive(this.interfaces, prevMode);
 	}
 

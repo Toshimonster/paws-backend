@@ -28,7 +28,6 @@ export class PulserState extends BaseState {
 	) {
 		for (const [interfaceName, devInterface] of subscribedInterfaces) {
 			if (!this.pulsers.has(interfaceName)) {
-				console.log(interfaceName);
 				const pulsers = [];
 				for (let i = 0; i < (devInterface.bufferSize ?? 0) / 3; i++) {
 					pulsers.push(new PulserLed(i, 5 * Math.random()));
@@ -45,6 +44,8 @@ export class PulserState extends BaseState {
 				buffer.writeUInt8(c, PulserLed.n * 3 + 2);
 			}
 
+			console.log("Supplying " + interfaceName);
+			console.log(buffer);
 			await devInterface.supply(buffer);
 		}
 	}
