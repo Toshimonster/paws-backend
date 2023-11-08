@@ -255,6 +255,7 @@ export const GattServices = {
 							value: Buffer,
 							callback
 						) => {
+							console.log("PAWS EXTRA PIXELDRAW WRITE");
 							const mode = driver.getMode();
 							if (mode instanceof PixelDrawer) {
 								if (mode.bufferSize === value.length) {
