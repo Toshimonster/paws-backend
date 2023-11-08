@@ -109,6 +109,9 @@ export const GattServices = {
 							if (await stateHandler.setState(stateChange)) {
 								callback(AttErrors.SUCCESS);
 							} else {
+								console.log(
+									`Unknown state called to change '${value}' -> '${stateChange}' for any of ${stateHandler.listStateNames()}`
+								);
 								callback(AttErrors.OUT_OF_RANGE);
 							}
 						},
