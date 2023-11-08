@@ -6,3 +6,4 @@
 export * from "./StateHandler.js";
 export * from "./BaseState.js";
 export * from "./PulserState.js";
+export * from "./GifState.js";

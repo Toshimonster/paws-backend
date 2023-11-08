@@ -17,7 +17,7 @@ class PulserLed {
  */
 export class PulserState extends BaseState {
 	private pulsers: Map<string, PulserLed[]> = new Map();
-	constructor(name?: string) {
+	constructor(name = "PulserState") {
 		super(name);
 	}
 

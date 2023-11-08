@@ -44,9 +44,27 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		})
 	);
 
+	const stateAssetRoot = "/paws/ToshiProto/State Assets/";
 	const StateHandler = Paws.addMode(
-		new Modes.States.StateHandler("States", [new Modes.States.PulserState()])
+		new Modes.States.StateHandler("States", [
+			new Modes.States.PulserState(),
+			new Modes.States.GifState("Idle", {
+				interfaceDefinitions: [
+					{
+						interface: "Front P3 Matrices",
+						file: stateAssetRoot + "Idle/Idle[face_single].gif",
+						transformation: "mirror",
+					},
+					{
+						interface: "Ws2812b",
+						file: stateAssetRoot + "Idle/Idle[circle_single].gif",
+						transformation: "normal",
+					},
+				],
+			}),
+		])
 	);
+
 	const PixelDrawer = Paws.addMode(
 		new Modes.PixelDrawer("PixelDrawer", {
 			interfaces: [FrontP3, Ws2812b],
