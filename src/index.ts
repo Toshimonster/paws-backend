@@ -49,7 +49,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 	const PixelDrawer = Paws.addMode(
 		new Modes.PixelDrawer("PixelDrawer", {
-			interfaces: [FrontP3],
+			interfaces: [FrontP3, Ws2812b],
 		})
 	);
 	const StreamDrawer = Paws.addMode(
