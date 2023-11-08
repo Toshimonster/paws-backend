@@ -52,13 +52,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 				interfaceDefinitions: [
 					{
 						interface: "Front P3 Matrices",
-						file: stateAssetRoot + "Idle/Idle[face_single].gif",
+						file: stateAssetRoot + "Idle/Idle[face_mirror].gif",
 						transformation: "mirror",
 					},
 					{
 						interface: "Ws2812b",
-						file: stateAssetRoot + "Idle/Idle[circle_single].gif",
-						transformation: "normal",
+						file: stateAssetRoot + "Idle/Idle[circle_mirror].gif",
+						transformation: "mirror",
 					},
 				],
 			}),
