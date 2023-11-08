@@ -1,5 +1,6 @@
 import { BaseMode } from "./BaseMode.js";
 import { BaseInterface } from "../Interfaces/BaseInterface.js";
+import * as buffer from "buffer";
 
 export interface PixelDrawerOptions {
 	/**
@@ -27,6 +28,9 @@ export class PixelDrawer extends BaseMode {
 			(a, cv) => a + (cv.bufferSize || 0),
 			0
 		);
+		console.log("!!!");
+		console.log(bufferSize);
+		console.log(this.options.interfaces[0].bufferSize);
 		this.state = Buffer.alloc(bufferSize);
 
 		//potential
@@ -54,10 +58,12 @@ export class PixelDrawer extends BaseMode {
 	private potentialBufferLength = 0;
 	public async potentialUpdate(buffer: Buffer) {
 		if (buffer.readInt8() === 0 && buffer.length === 8) {
+			// Start request
 			this.potentialBufferLength = 0;
 			return;
 		}
 
+		// Copy buffer
 		buffer.copy(this.potentialBuffer, this.potentialBufferLength);
 		this.potentialBufferLength += buffer.length;
 
