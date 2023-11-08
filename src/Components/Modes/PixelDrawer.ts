@@ -75,11 +75,6 @@ export class PixelDrawer extends BaseMode {
 
 			for (let c = 0; c < cols; c++) {
 				for (let r = 0; r < rows; r++) {
-					console.log(
-						`${c}:${r}      ${c + r * cols}        ${
-							c + r * 2 * cols
-						}         ${32 + (32 - c) + r * 2 * cols}`
-					);
 					const pixelNum = c + r * cols;
 					const red = this.potentialBuffer.readUInt8(pixelNum * 3);
 					const green = this.potentialBuffer.readUInt8(pixelNum * 3 + 1);
@@ -90,10 +85,10 @@ export class PixelDrawer extends BaseMode {
 					toSend.writeUInt8(green, adjPixelNum * 3 + 1);
 					toSend.writeUInt8(blue, adjPixelNum * 3 + 2);
 
-					const mirPixelNum = 64 + (63 - c) + r * 2 * cols;
-					toSend.writeUInt8(red, mirPixelNum * 3);
-					toSend.writeUInt8(green, mirPixelNum * 3 + 1);
-					toSend.writeUInt8(blue, mirPixelNum * 3 + 2);
+					// const mirPixelNum = 64 + (63 - c) + r * 2 * cols;
+					// toSend.writeUInt8(red, mirPixelNum * 3);
+					// toSend.writeUInt8(green, mirPixelNum * 3 + 1);
+					// toSend.writeUInt8(blue, mirPixelNum * 3 + 2);
 				}
 			}
 			await this.update(toSend);
