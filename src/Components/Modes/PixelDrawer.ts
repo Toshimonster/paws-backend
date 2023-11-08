@@ -75,6 +75,11 @@ export class PixelDrawer extends BaseMode {
 
 			for (let c = 0; c < cols; c++) {
 				for (let r = 0; r < rows; r++) {
+					console.log(
+						`${c}:${r}      ${c + r * cols}        ${
+							c + r * 2 * cols
+						}         ${32 + (32 - c) + r * 2 * cols}`
+					);
 					const pixelNum = c + r * cols;
 					const red = this.potentialBuffer.readUInt8(pixelNum * 3);
 					const green = this.potentialBuffer.readUInt8(pixelNum * 3 + 1);
