@@ -18,6 +18,14 @@ export interface CurrentTransitionInfo {
 	until?: number;
 }
 
+export interface BaseState {
+	/**
+	 * For a state to be used as a transition state, the length of the state must be defined.
+	 * This is in seconds
+	 */
+	length?: number;
+}
+
 /**
  * A base state to be used by a state handler.
  * Transitions are accomplished via the names of states, of which
@@ -114,10 +122,4 @@ export abstract class BaseState extends NamedComponent {
 		t: number,
 		dt: number
 	): Promise<void> | void;
-
-	/**
-	 * For a state to be used as a transition state, the length of the state must be defined.
-	 * This is in seconds
-	 */
-	abstract length: number | undefined;
 }
