@@ -81,6 +81,7 @@ export class PixelDrawer extends BaseMode {
 					const blue = this.potentialBuffer.readUInt8(pixelNum * 3 + 2);
 
 					const i = c + r * 64;
+					console.log(i);
 					const normal = 3 * (64 * ~~(i / 64) + i);
 					const mirror = 3 * (3 * 64 * ~~(i / 64) + 2 * 64 - i - 1);
 
