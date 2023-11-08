@@ -28,6 +28,7 @@ export class PulserState extends BaseState {
 	) {
 		for (const [interfaceName, devInterface] of subscribedInterfaces) {
 			if (!this.pulsers.has(interfaceName)) {
+				console.log(interfaceName);
 				const pulsers = [];
 				for (let i = 0; i < (devInterface.bufferSize ?? 0) / 3; i++) {
 					pulsers.push(new PulserLed(i, 5 * Math.random()));
