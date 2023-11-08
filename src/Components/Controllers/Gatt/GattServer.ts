@@ -1,7 +1,7 @@
 import { BaseController } from "../BaseController.js";
 import BleHost, { GattServerService, Transport } from "ble-host";
 import { Driver } from "../../../Driver.js";
-import { optionalImport } from "../../Helper/OptionalImport.js";
+import { optionalImport } from "../../Helper/index.js";
 const HciSocket: new () => Transport = await optionalImport(
 	async () => (await import("hci-socket")).default
 );
