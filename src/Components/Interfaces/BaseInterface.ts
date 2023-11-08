@@ -33,7 +33,6 @@ export abstract class BaseInterface extends NamedComponent {
 			console.error(
 				`Invalid buffer size for ${this.name}: ${this.bufferSize} v ${buffer.length}`
 			);
-		console.log(buffer);
 		return this.setBuffer(buffer);
 	}
 }
