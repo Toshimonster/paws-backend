@@ -258,7 +258,10 @@ export const GattServices = {
 							console.log("PAWS EXTRA PIXELDRAW WRITE");
 							const mode = driver.getMode();
 							if (mode instanceof PixelDrawer) {
-								if (mode.bufferSize !== value.length) {
+								await mode.potentialUpdate(value);
+								callback(AttErrors.SUCCESS);
+
+								/*if (mode.bufferSize !== value.length) {
 									console.log(
 										`Size mismatch ${mode.bufferSize} != ${value.length}`
 									);
@@ -266,7 +269,7 @@ export const GattServices = {
 								} else {
 									await mode.update(value);
 									callback(AttErrors.SUCCESS);
-								}
+								}*/
 							} else {
 								console.log("Received Pixeldraw request outside of mode");
 								callback(AttErrors.WRITE_REQUEST_REJECTED);

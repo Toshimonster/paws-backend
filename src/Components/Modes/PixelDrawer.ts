@@ -28,6 +28,9 @@ export class PixelDrawer extends BaseMode {
 			0
 		);
 		this.state = Buffer.alloc(bufferSize);
+
+		//potential
+		this.potentialBuffer = Buffer.allocUnsafe(this.bufferSize);
 	}
 
 	/**
@@ -44,6 +47,26 @@ export class PixelDrawer extends BaseMode {
 			);
 			pointer += devInterface.bufferSize ?? 0;
 			await devInterface.supply(buffer);
+		}
+	}
+
+	private readonly potentialBuffer;
+	private potentialBufferLength = -1;
+	public async potentialUpdate(buffer: Buffer) {
+		if (buffer.readInt8() === 0) {
+			this.potentialBufferLength = 0;
+		}
+
+		buffer.copy(this.potentialBuffer, this.potentialBufferLength);
+		this.potentialBufferLength += buffer.length;
+
+		console.log(this.potentialBufferLength);
+		if (this.potentialBufferLength === this.bufferSize) {
+			console.log("!!!");
+			await this.update(this.potentialBuffer);
+		} else if (this.potentialBufferLength > this.bufferSize) {
+			console.error("BUFFER OVERFLOW");
+			this.potentialBufferLength = 0;
 		}
 	}
 
