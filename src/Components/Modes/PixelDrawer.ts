@@ -55,6 +55,7 @@ export class PixelDrawer extends BaseMode {
 	public async potentialUpdate(buffer: Buffer) {
 		if (buffer.readInt8() === 0 && buffer.length === 8) {
 			this.potentialBufferLength = 0;
+			return;
 		}
 
 		buffer.copy(this.potentialBuffer, this.potentialBufferLength);
