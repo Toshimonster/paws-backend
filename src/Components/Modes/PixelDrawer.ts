@@ -90,7 +90,7 @@ export class PixelDrawer extends BaseMode {
 					toSend.writeUInt8(green, adjPixelNum * 3 + 1);
 					toSend.writeUInt8(blue, adjPixelNum * 3 + 2);
 
-					const mirPixelNum = 32 + (31 - c) + r * 2 * cols;
+					const mirPixelNum = 64 + (63 - c) + r * 2 * cols;
 					toSend.writeUInt8(red, mirPixelNum * 3);
 					toSend.writeUInt8(green, mirPixelNum * 3 + 1);
 					toSend.writeUInt8(blue, mirPixelNum * 3 + 2);
