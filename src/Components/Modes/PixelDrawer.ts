@@ -51,9 +51,9 @@ export class PixelDrawer extends BaseMode {
 	}
 
 	private readonly potentialBuffer;
-	private potentialBufferLength = -1;
+	private potentialBufferLength = 0;
 	public async potentialUpdate(buffer: Buffer) {
-		if (buffer.readInt8() === 0) {
+		if (buffer.readInt8() === 0 && buffer.length === 8) {
 			this.potentialBufferLength = 0;
 		}
 
