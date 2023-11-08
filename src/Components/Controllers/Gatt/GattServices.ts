@@ -213,7 +213,6 @@ export const GattServices = {
                 PAWS Additional service; pixel drawing
                  */
 				uuid: uuids.PAWS_EXTRA.uuid,
-				isSecondaryService: true,
 				characteristics: [
 					{
 						// PixelDraw Enabled service
