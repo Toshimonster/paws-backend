@@ -35,6 +35,13 @@ export type GattUuidDef = {
 			STREAM_INTERFACE: uuid;
 		};
 	};
+	PAWS_MODE: {
+		uuid: uuid;
+		children: {
+			MODE_LIST: uuid;
+			MODE: uuid;
+		};
+	};
 };
 
 /**
@@ -60,6 +67,13 @@ export const GattServerUUIDS: GattUuidDef = {
 			PIXELDRAW_INTERFACE: "65a8fc81-2f01-47e4-b25d-b39b4a90718c",
 			STREAM_ENABLED: "450c8fdb-9502-4b00-b488-cb2455ab842e",
 			STREAM_INTERFACE: "21232f3e-fe85-4fda-b204-1d157d2f12c4",
+		},
+	},
+	PAWS_MODE: {
+		uuid: "9cab4edd-d787-4a8c-b2f8-23bb82ad2c17",
+		children: {
+			MODE: "18eb891a-8e1b-4a0c-9374-d904f97b0b52",
+			MODE_LIST: "06d84d50-1e54-49b9-a749-1b4c9c7daf16",
 		},
 	},
 };
@@ -273,6 +287,50 @@ export const GattServices = {
 							} else {
 								callback(AttErrors.WRITE_REQUEST_REJECTED);
 							}
+						},
+					},
+				],
+			};
+		},
+
+	/**
+	 * Defines the mdode switcher.
+	 * Allows for reading, and switching modes
+	 * @param uuids The default BLE characteristic and service uuids
+	 * @constructor
+	 */
+	PAWS_MODE:
+		(uuids: GattUuidDef = GattServerUUIDS) =>
+		(driver: Driver): GattServerService => {
+			return {
+				//P.A.W.S Mode Service
+				uuid: uuids.PAWS_MODE.uuid,
+				characteristics: [
+					{
+						// PAWS mode
+						uuid: uuids.PAWS_MODE.children.MODE,
+						properties: ["read", "write"],
+						onRead: (connection, callback) => {
+							callback(AttErrors.SUCCESS, driver.getMode()?.name);
+						},
+						onWrite: async (connection, needsResponse, value, callback) => {
+							const stateChange = value.toString().replace(/\0/g, "");
+							if (await driver.setMode(stateChange)) {
+								callback(AttErrors.SUCCESS);
+							} else {
+								callback(AttErrors.OUT_OF_RANGE);
+							}
+						},
+					},
+					{
+						// PAWS list modes
+						uuid: uuids.PAWS_MODE.children.MODE_LIST,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							callback(
+								AttErrors.SUCCESS,
+								Array.from(driver.getModes().keys()).join(", ")
+							);
 						},
 					},
 				],
