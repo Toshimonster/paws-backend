@@ -30,7 +30,7 @@ export abstract class BaseInterface extends NamedComponent {
 	 */
 	public async supply(buffer: Buffer) {
 		if (this.bufferSize && this.bufferSize !== buffer.length)
-			console.error(
+			console.warn(
 				`Invalid buffer size for ${this.name}: ${this.bufferSize} v ${buffer.length}`
 			);
 		return this.setBuffer(buffer);
