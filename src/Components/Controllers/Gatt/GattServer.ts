@@ -111,7 +111,7 @@ export class GattServer extends BaseController {
 
 			console.log(_128UUIDS);
 			const advDataBuffer = new AdvertisingDataBuilder()
-				.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
+				//.addFlags(["leGeneralDiscoverableMode", "brEdrNotSupported"])
 				.addLocalName(/*isComplete*/ true, "test")
 				.add128BitServiceUUIDs(/*isComplete*/ false, [_128UUIDS[0]])
 				//.add16BitServiceUUIDs(/*isComplete*/ true, _16UUIDS)
