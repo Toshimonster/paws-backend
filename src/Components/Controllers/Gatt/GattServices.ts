@@ -258,12 +258,16 @@ export const GattServices = {
 							const mode = driver.getMode();
 							if (mode instanceof PixelDrawer) {
 								if (mode.bufferSize === value.length) {
+									console.log(
+										`Size mismatch ${mode.bufferSize} != ${value.length}`
+									);
 									callback(AttErrors.INVALID_ATTRIBUTE_VALUE_LENGTH);
 								} else {
 									await mode.update(value);
 									callback(AttErrors.SUCCESS);
 								}
 							} else {
+								console.log("Received Pixeldraw request outside of mode");
 								callback(AttErrors.WRITE_REQUEST_REJECTED);
 							}
 						},
