@@ -288,11 +288,11 @@ export const GattServices = {
 							callback
 						) => {
 							const mode = driver.getMode();
-							if (mode instanceof StreamDrawer) {
+							if (mode instanceof PixelDrawer) {
 								await mode.potentialUpdate(value);
 								callback(AttErrors.SUCCESS);
 							} else {
-								console.log("Received Pixeldraw request outside of mode");
+								console.log("Received StreamDraw request outside of mode");
 								callback(AttErrors.WRITE_REQUEST_REJECTED);
 							}
 						},
