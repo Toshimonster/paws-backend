@@ -170,6 +170,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	Paws.start().then(() => {
+		StateHandler.setState("Idle");
 		console.log("Paws running!");
 		GattServer.start(Paws);
 	});
