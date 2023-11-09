@@ -255,7 +255,6 @@ export const GattServices = {
 							value: Buffer,
 							callback
 						) => {
-							console.log("PAWS EXTRA PIXELDRAW WRITE");
 							const mode = driver.getMode();
 							if (mode instanceof PixelDrawer) {
 								await mode.potentialUpdate(value);
@@ -288,7 +287,6 @@ export const GattServices = {
 							value: Buffer,
 							callback
 						) => {
-							console.log("PAWS EXTRA STREAMDRAW WRITE");
 							const mode = driver.getMode();
 							if (mode instanceof StreamDrawer) {
 								await mode.potentialUpdate(value);

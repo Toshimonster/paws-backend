@@ -65,7 +65,7 @@ export class PixelDrawer extends BaseMode {
 		this.potentialBufferLength += buffer.length;
 
 		if (this.potentialBufferLength === this.bufferSize / 2) {
-			console.log("Updating PixelDraw Buffer");
+			console.log(`Updating Drawer for ${this.constructor.name} Buffer`);
 			// Constructing update buffer
 			const toSend = Buffer.allocUnsafe(this.bufferSize);
 			// Assuming mirrored pixeldraw

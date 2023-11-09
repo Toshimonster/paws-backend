@@ -150,11 +150,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 
 	const PixelDrawer = Paws.addMode(
 		new Modes.PixelDrawer("PixelDrawer", {
-			interfaces: [FrontP3, Ws2812b],
+			interfaces: [FrontP3],
 		})
 	);
 	const StreamDrawer = Paws.addMode(
-		new Modes.StreamDrawer("StreamDrawer", {
+		new Modes.PixelDrawer("StreamDrawer", {
 			interfaces: [FrontP3],
 		})
 	);
