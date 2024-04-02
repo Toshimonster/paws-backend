@@ -50,24 +50,32 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	const stateAssetRoot = "/paws/ToshiProto/State Assets/";
-	const stateImgurPreviewCodeMap = "_previewImgurMap.json"
+	// const stateImgurPreviewCodeMap = "_previewImgurMap.json"
 
-	let stateImgurPreviewCodes: {any?: any} = {}
-	const stateImgurPath = path.join(stateAssetRoot, stateImgurPreviewCodeMap)
-	if (fs.existsSync(stateImgurPath)) {
-		stateImgurPreviewCodes = JSON.parse(
-			fs.readFileSync(path.join(stateAssetRoot, stateImgurPreviewCodeMap), 'utf8')
-		)
-	}
+	// let stateImgurPreviewCodes: {any?: any} = {}
+	// const stateImgurPath = path.join(stateAssetRoot, stateImgurPreviewCodeMap)
+	// if (fs.existsSync(stateImgurPath)) {
+	// 	stateImgurPreviewCodes = JSON.parse(
+	// 		fs.readFileSync(path.join(stateAssetRoot, stateImgurPreviewCodeMap), 'utf8')
+	// 	)
+	// }
 
 	const states: BaseState[] = [];
 	fs.readdirSync(stateAssetRoot).forEach((state) => {
 		console.log(state);
+		let imgurCode: string = ""
 		const stateRoot = path.join(stateAssetRoot, state);
 		const stateTransitions = new Map<string, any[]>();
 		const root: { file: string; interface: string; transformation: any }[] = [];
 
 		fs.readdirSync(stateRoot).forEach((file) => {
+			// Check for imgurCode
+			if (file.toLowerCase() == "preview.link") {
+				imgurCode = fs.readFileSync(path.join(stateRoot, file), 'utf8')
+				console.log(`Found Preview Link Code ${imgurCode}`)
+				return
+			}
+
 			const fileRoot = path.join(stateRoot, file);
 
 			console.log("\t\t", fileRoot);
@@ -129,8 +137,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			});
 		});
 
-		const rawImgurCode = stateImgurPreviewCodes[state as keyof typeof stateImgurPreviewCodes]
-		const imgurCode = typeof rawImgurCode == 'string' ? rawImgurCode : undefined
+		// const rawImgurCode = stateImgurPreviewCodes[state as keyof typeof stateImgurPreviewCodes]
+		// const imgurCode = typeof rawImgurCode == 'string' ? rawImgurCode : undefined
 
 		states.push(
 			new Modes.States.GifState(
