@@ -19,6 +19,7 @@ import { BaseState } from "./Components/Modes/States/index.js";
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	// Run by default
 	const Paws = new Driver();
+
 	/*const TestInterface = Paws.addInterface(
 		new Interfaces.TextLedInterface("TestInterface")
 	);*/
@@ -49,6 +50,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	);
 
 	const stateAssetRoot = "/paws/ToshiProto/State Assets/";
+	const stateImgurPreviewCodeMap = "_previewImgurMap.json"
+
+	let stateImgurPreviewCodes: {any?: any} = {}
+	const stateImgurPath = path.join(stateAssetRoot, stateImgurPreviewCodeMap)
+	if (fs.existsSync(stateImgurPath)) {
+		stateImgurPreviewCodes = JSON.parse(
+			fs.readFileSync(path.join(stateAssetRoot, stateImgurPreviewCodeMap), 'utf8')
+		)
+	}
 
 	const states: BaseState[] = [];
 	fs.readdirSync(stateAssetRoot).forEach((state) => {
@@ -65,6 +75,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			const state =
 				stateMatches === null ? undefined : stateMatches[0].slice(1);
 			if (state != state) return; //File is not a valid gif definition file
+
 			const transitions = file.match(/\w+(?=[-~])/g);
 			const componentInterfaceMatches = file.match(
 				/\[[^_\]]+(?=(_\w+)?\]\.gif$)/
@@ -118,11 +129,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			});
 		});
 
+		const rawImgurCode = stateImgurPreviewCodes[state as keyof typeof stateImgurPreviewCodes]
+		const imgurCode = typeof rawImgurCode == 'string' ? rawImgurCode : undefined
+
 		states.push(
 			new Modes.States.GifState(
 				state,
 				{ interfaceDefinitions: root },
-				transitions
+				transitions,
+				imgurCode
 			)
 		);
 	});
@@ -164,7 +179,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			name: "PAWS-T",
 			services: [
 				Controllers.Gatt.Services.GattServices.PAWS_STATE(StateHandler),
-				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED(),
+				Controllers.Gatt.Services.GattServices.PAWS_EXTENDED()
 			],
 		})
 	);

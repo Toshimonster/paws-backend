@@ -19,6 +19,7 @@ export type GattUuidDef = {
 		children: {
 			STATES: uuid;
 			STATE: uuid;
+			STATE_IMG: uuid;
 			TIMESTAMP: uuid;
 			UPTIME: uuid;
 			CPU_TEMP: uuid;
@@ -48,6 +49,7 @@ export const GattServerUUIDS: GattUuidDef = {
 		children: {
 			STATES: "0694bc1c-0064-4bd7-9840-41fa65d7355e",
 			STATE: "81a6a500-b85e-4951-b6ac-b63c8f97f678",
+			STATE_IMG: "780dc226-9378-4a2a-8e39-b3d4fb2f6207",
 			TIMESTAMP: "fa7abfe6-af90-42bf-a154-c2bdb7eb336a",
 			UPTIME: "97dcaa87-eaa8-4546-bb33-ad001fc3daf4",
 			CPU_TEMP: "31b0159a-d4bd-4396-9e77-7ebb24db6df3",
@@ -112,6 +114,18 @@ export const GattServices = {
 								callback(AttErrors.OUT_OF_RANGE);
 							}
 						},
+					},
+					{
+						// PAWS All state image previews, as imgur codes. eg i.imgur.com/{XXXXXXX}.gif
+						uuid: uuids.PAWS.children.STATE_IMG,
+						properties: ["read"],
+						onRead: (connection, callback) => {
+							callback(
+								AttErrors.SUCCESS,
+								stateHandler.listImgurPreviews().join(", ")
+							)
+						},
+
 					},
 					{
 						// Current Timestamp as String
@@ -296,8 +310,8 @@ export const GattServices = {
 								callback(AttErrors.WRITE_REQUEST_REJECTED);
 							}
 						},
-					},
+					}
 				],
 			};
-		},
+		}
 };

@@ -34,9 +34,13 @@ export interface BaseState {
 export abstract class BaseState extends NamedComponent {
 	private readonly transitions?: TransitionInfo[];
 	private currentTransition: CurrentTransitionInfo = {};
-	protected constructor(name?: string, transitions?: TransitionInfo[]) {
+
+	public readonly imgurPreviewCode?: string;
+
+	protected constructor(name?: string, transitions?: TransitionInfo[], imgurPreviewCode?: string) {
 		super(name);
 		this.transitions = transitions;
+		this.imgurPreviewCode = imgurPreviewCode;
 	}
 
 	/**

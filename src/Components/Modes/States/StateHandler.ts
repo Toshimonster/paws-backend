@@ -27,6 +27,12 @@ export class StateHandler extends AnimatedMode {
 		return this.listStates().map((state) => state.name);
 	}
 
+	public listImgurPreviews() {
+		return this.listStates().map((state) => {
+			return state.imgurPreviewCode
+		});
+	}
+
 	/**
 	 * Sets a state
 	 * @param name
@@ -44,6 +50,18 @@ export class StateHandler extends AnimatedMode {
 		await newState.onActive(this, lastState);
 
 		return true;
+	}
+
+	/**
+	 * Returns a state
+	 * @param name 
+	 * @returns The state itself
+	 */
+	public getState(name: string) {
+		if (!this.states.has(name)) return;
+		const state = this.states.get(name) as BaseState;
+
+		return state
 	}
 
 	/**

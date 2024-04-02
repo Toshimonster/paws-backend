@@ -30,9 +30,10 @@ export class GifState extends BaseState {
 	constructor(
 		name: string,
 		options: GifStateOptions,
-		transitions?: TransitionInfo[]
+		transitions?: TransitionInfo[],
+		imgurPreviewCode?: string
 	) {
-		super(name, transitions);
+		super(name, transitions, imgurPreviewCode);
 		this.options = options;
 		console.log("Loading gifs...");
 		this.load();
